@@ -2,7 +2,7 @@ import { useState } from "react";
 import Icon from "../icons/Icon.jsx";
 import { avatar } from "../data.js";
 
-export default function PostCard({ p }) {
+export default function PostCard({ p, onClick }) {
   const [liked, setLiked] = useState(false);
   return (
     <article className="post" onClick={onClick}>

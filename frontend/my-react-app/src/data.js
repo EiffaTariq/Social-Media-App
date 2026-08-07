@@ -1,14 +1,23 @@
+import post1 from "./assets/images/post1.jpeg";
+import img8 from "./assets/images/img8.jfif";
+import img6 from "./assets/images/img6.jpeg";
+import img3 from "./assets/images/img3.jpeg";
+import img4 from "./assets/images/img4.jpeg";
+import img5 from "./assets/images/img5.jpeg";
+import img7 from "./assets/images/img7.jpeg";
+
 
 export const CURRENT_USER = "Eiffa Tariq";
   export const posts = [
-  {id:1, img:"https://picsum.photos/seed/nook1/500/650", cap:"Workahlic", user:"Amara K.", av:5, likes:214,owner:"Eiffa Tariq"},
-  {id:2, img:"https://picsum.photos/seed/nook2/500/420", cap:"Found this staircase in Lisbon and stood there for ten minutes.", user:"Ahsam Tariq", av:12, likes:98, owner:"Ahsam Tariq"},
-  {id:3, img:"https://picsum.photos/seed/nook3/500/560", cap:"Slow mornings, film grain, and a pot of coffee that took too long to make on purpose.", user:"Anzil Arshad", av:23, likes:341},
-  {id:4, img:"https://picsum.photos/seed/nook4/500/480", cap:"Sea fog rolling in over the harbour at 6am.", user:"Tuba Imtiaz", av:31, likes:76,owner:"Tuba Imtiaz"},
-  {id:5, img:"https://picsum.photos/seed/nook5/500/700", cap:"Nothing beats this me time at the beach.", user:"Lyba Gul", av:44, likes:512,owner:"Lyba Gul"},
-  {id:6, img:"https://picsum.photos/seed/nook6/500/440", cap:"Repotted every plant in the flat. RIP to my Saturday.", user:"Anural Imtiaz", av:15, likes:64,owner:"Anural Imtiaz"},
-  {id:7, img:"https://picsum.photos/seed/nook7/500/600", cap:"enjoying this peaceful view", user:"Zoey Romanoff", av:8, likes:189,owner:"Zoey Romanoff"},
-  {id:8, img:"https://picsum.photos/seed/nook8/500/500", cap:"Made pasta from scratch and only cried a little.", user:"Toji Fushiguro", av:52, likes:120, owner:"Toji Fushiguro"},
+  {id:1, img:post1, cap:"enjoying this me time", user:"Amara K.", av:5, likes:214,owner:"Eiffa Tariq"},
+  {id:2, img:img8, cap:"Made pasta from scratch and only cried a little.", user:"Toji Fushiguro", av:52, likes:120, owner:"Toji Fushiguro"},
+  {id:3, img:img3, cap:"Slow mornings, film grain, and a pot of coffee that took too long to make on purpose.", user:"Anzil Arshad", av:23, likes:341},
+  {id:4, img:img4, cap:"Sea fog rolling in over the harbour at 6am.", user:"Tuba Imtiaz", av:31, likes:76,owner:"Tuba Imtiaz"},
+  {id:5, img:img5, cap:"Nothing beats this me time at the beach.", user:"Lyba Gul", av:44, likes:512,owner:"Lyba Gul"},
+  {id:6, img:img6, cap:"Repotted every plant in the flat. RIP to my Saturday.", user:"Anural Imtiaz", av:15, likes:64,owner:"Anural Imtiaz"},
+  {id:7, img:img7, cap:"enjoying this peaceful view", user:"Zoey Romanoff", av:8, likes:189,owner:"Zoey Romanoff"},
+  {id:8, img:"https://picsum.photos/seed/nook2/500/420", cap:"Workahlic", user:"Ahsam Tariq", av:12, likes:98, owner:"Ahsam Tariq"},
+  
 ];
 
 //Weeknight ramen, extra chili oil, no regrets.

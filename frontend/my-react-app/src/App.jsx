@@ -6,6 +6,8 @@ import FeedPage from "./pages/FeedPage.jsx";
 import DiscoverPage from "./pages/DiscoverPage.jsx";
 import ActivityPage from "./pages/ActivityPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import PostDetailPage from "./pages/PostDetailPage.jsx";
+
 
 const PAGES = {
   feed: FeedPage,
@@ -26,7 +28,7 @@ export default function App() {
         {selectedPost
         ? <PostDetailPage post={selectedPost} onBack={() => setSelectedPost(null)} />
         : <Page onOpenPost={setSelectedPost} />}
-        <Page />
+        
       </main>
       <BottomNav active={active} setActive={setActive} />
     </div>
