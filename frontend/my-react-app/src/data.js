@@ -9,7 +9,7 @@ import img7 from "./assets/images/img7.jpeg";
 
 export const CURRENT_USER = "Eiffa Tariq";
   export const posts = [
-  {id:1, img:post1, cap:"enjoying this me time", user:"Amara K.", av:5, likes:214,owner:"Eiffa Tariq"},
+  {id:1, img:post1, cap:"enjoying this me time", user:"Eiffa Tariq", av:5, likes:214,owner:"Eiffa Tariq"},
   {id:2, img:img8, cap:"Made pasta from scratch and only cried a little.", user:"Toji Fushiguro", av:52, likes:120, owner:"Toji Fushiguro"},
   {id:3, img:img3, cap:"Slow mornings, film grain, and a pot of coffee that took too long to make on purpose.", user:"Anzil Arshad", av:23, likes:341},
   {id:4, img:img4, cap:"Sea fog rolling in over the harbour at 6am.", user:"Tuba Imtiaz", av:31, likes:76,owner:"Tuba Imtiaz"},
@@ -20,7 +20,6 @@ export const CURRENT_USER = "Eiffa Tariq";
   
 ];
 
-//Weeknight ramen, extra chili oil, no regrets.
 export const candidates = [
   {id:1, name:"Jiselle", age:26, img:"https://picsum.photos/seed/person1/500/650", bio:"Currently reading too many novels at once and taking the long way home. Always down for a gallery or a good playlist.", tags:["Photography","Long walks","Vinyl"], loc:"Sydney", dist:"1.4 km away", mutual:6},
   {id:2, name:"Marcus", age:29, img:"https://picsum.photos/seed/person2/500/650", bio:"Building small things with wood and bigger things with code. Trying to get better at both.", tags:["Woodworking","Coffee","Hiking"], loc:"Melbourne", dist:"3.2 km away", mutual:2},
@@ -29,12 +28,12 @@ export const candidates = [
 ];
 
 export const activity = [
-  {id:1, type:"like", name:"Priya R.", av:23, txt:"liked your post", thumb:"https://picsum.photos/seed/act1/100/100", time:"2m"},
-  {id:2, type:"follow", name:"Theo N.", av:12, txt:"started following you", time:"18m"},
-  {id:3, type:"comment", name:"Nadia S.", av:44, txt:"commented: \"this is stunning\"", thumb:"https://picsum.photos/seed/act2/100/100", time:"1h"},
+  {id:1, type:"like", name:"Tuba Imtiaz", av:23, txt:"liked your post", thumb:"https://picsum.photos/seed/act1/100/100", time:"2m"},
+  {id:2, type:"follow", name:"Toji Fushiguro", av:12, txt:"started following you", time:"18m"},
+  {id:3, type:"comment", name:"Lyba Gul", av:44, txt:"commented: \"this is stunning\"", thumb:"https://picsum.photos/seed/act2/100/100", time:"1h"},
   {id:4, type:"like", name:"Jules M.", av:31, txt:"liked your post", thumb:"https://picsum.photos/seed/act3/100/100", time:"3h"},
-  {id:5, type:"follow", name:"Owen D.", av:15, txt:"started following you", time:"6h"},
-  {id:6, type:"comment", name:"Elin V.", av:8, txt:"commented: \"where is this??\"", thumb:"https://picsum.photos/seed/act4/100/100", time:"1d"},
+  {id:5, type:"follow", name:"Zoey Romanoff", av:15, txt:"started following you", time:"6h"},
+  {id:6, type:"comment", name:"Ahsam Tariq", av:8, txt:"commented: \"where is this??\"", thumb:"https://picsum.photos/seed/act4/100/100", time:"1d"},
 ];
 
 export const avatar = (n) => `https://i.pravatar.cc/150?img=${n}`;
