@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { posts as initialPosts } from "../data.js";
 import { avatar, CURRENT_USER } from "../data.js";
-import myAvatar from "../assets/images/profile.jfif";
+//import myAvatar from "../assets/images/profile.jfif";
 
 const PostsContext = createContext(null);
 

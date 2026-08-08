@@ -5,9 +5,11 @@ import img3 from "./assets/images/img3.jpeg";
 import img4 from "./assets/images/img4.jpeg";
 import img5 from "./assets/images/img5.jpeg";
 import img7 from "./assets/images/img7.jpeg";
-
+import profilePic from "./assets/images/profile.jfif";
 
 export const CURRENT_USER = "Eiffa Tariq";
+export const CURRENT_USER_AVATAR = profilePic;
+
   export const posts = [
   {id:1, img:post1, cap:"enjoying this me time", user:"Eiffa Tariq", av:5, likes:214,owner:"Eiffa Tariq"},
   {id:2, img:img8, cap:"Made pasta from scratch and only cried a little.", user:"Toji Fushiguro", av:52, likes:120, owner:"Toji Fushiguro"},

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import Icon from "../icons/Icon.jsx";
-import { avatar } from "../data.js";
+import { avatar, CURRENT_USER, CURRENT_USER_AVATAR } from "../data.js";
+
+
 
 export default function PostCard({ p, onClick }) {
   const [liked, setLiked] = useState(false);
+  const avatarSrc = p.owner === CURRENT_USER ? CURRENT_USER_AVATAR : avatar(p.av);
   return (
     <article className="post" onClick={onClick}>
       <img src={p.img} alt={p.cap} loading="lazy" />
