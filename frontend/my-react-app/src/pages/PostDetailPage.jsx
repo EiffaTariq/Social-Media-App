@@ -2,7 +2,7 @@ import Icon from "../icons/Icon.jsx";
 import { avatar } from "../data.js";
 
 export default function PostDetailPage({ post, onBack }) {
-  const avatarSrc = post.owner === CURRENT_USER ? CURRENT_USER_AVATAR : avatar(post.av);
+  //const avatarSrc = post.owner === CURRENT_USER ? CURRENT_USER_AVATAR : avatar(post.av);
    
   return (
     <div className="post-detail">
