@@ -1,11 +1,13 @@
 import Brand from "./Brand.jsx";
 import Icon from "../icons/Icon.jsx";
 import { NAV } from "../nav.js";
+import StatusRail from "./StatusRail.jsx";
 
-export default function Rail({ active, setActive }) {
+export default function Rail({ active, setActive, onOpenStatusGroup }) {
   return (
     <aside className="rail">
       <Brand />
+      <StatusRail onOpenStatusGroup={onOpenStatusGroup} />
       <nav>
         {NAV.map((n) => (
           <a

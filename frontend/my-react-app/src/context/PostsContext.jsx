@@ -1,24 +1,58 @@
-import { createContext, useContext, useState } from "react";
-import { posts as initialPosts } from "../data.js";
-import { avatar, CURRENT_USER } from "../data.js";
-//import myAvatar from "../assets/images/profile.jfif";
+import { createContext, useContext, useEffect, useState } from "react";
+import { getAllPosts, createPost, likePost, addComment as apiAddComment, updatePostCaption, deletePostById } from "../api.js";
 
 const PostsContext = createContext(null);
 
 export function PostsProvider({ children }) {
-  const [posts, setPosts] = useState(initialPosts);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [actionError, setActionError] = useState(null); // moved inside
 
-  const addPost = (post) =>
-    setPosts((prev) => [{ id: Date.now(), owner: CURRENT_USER, likes: 0, av: myAvatar, ...post }, ...prev]);
+  useEffect(() => {
+    getAllPosts()
+      .then(setPosts)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const updatePost = (id, updates) =>
-    setPosts((prev) => prev.map((p) => (p.id === id ? { ...p, ...updates } : p)));
+  const addPost = async (caption, ownerId, image) => {
+    const { post } = await createPost(caption, ownerId, image);
+    setPosts((prev) => [post, ...prev]);
+  };
 
-  const deletePost = (id) =>
-    setPosts((prev) => prev.filter((p) => p.id !== id));
+  const updatePost = async (postId, caption) => {
+    try {
+      const { post } = await updatePostCaption(postId, caption);
+      setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
+    } catch (err) {
+      setActionError(err.message);
+      throw err;
+    }
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      await deletePostById(postId);
+      setPosts((prev) => prev.filter((p) => p._id !== postId));
+    } catch (err) {
+      setActionError(err.message);
+      throw err;
+    }
+  };
+
+  const toggleLike = async (postId, userId) => {
+    const { post } = await likePost(postId, userId);
+    setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
+  };
+
+  const submitComment = async (postId, userId, comment) => {
+    const { post } = await apiAddComment(postId, userId, comment);
+    setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
+  };
 
   return (
-    <PostsContext.Provider value={{ posts, addPost, updatePost, deletePost }}>
+    <PostsContext.Provider value={{ posts, loading, error, actionError, addPost, updatePost, deletePost, toggleLike, submitComment }}>
       {children}
     </PostsContext.Provider>
   );
