@@ -65,7 +65,6 @@ app.use('/api/status', statusRoutes);
 connectDb()
   .then(() => console.log('DB connected'))
   .catch((error) => console.error('DB connection failed:', error));
-
 app.listen(PORT, () => {
   console.log(`✅ Server started on port ${PORT}`);
 });

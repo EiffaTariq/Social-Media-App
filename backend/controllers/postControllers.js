@@ -2,16 +2,26 @@ import { Post } from "../models/postModel.js";
 import TryCatch from "../utils/TryCatch.js";
 
 export const newPost = TryCatch(async (req, res) => {
+   console.log("POST /api/post/new hit");
+  console.log("Request body:", req.body);
   const { caption, ownerId, image } = req.body;
   if (!caption || !ownerId) {
     return res.status(400).json({ message: "Caption and ownerId are required" });
   }
   const post = await Post.create({ caption, owner: ownerId, image });
+
+  console.log("Created post:", post);
+  console.log("Created post ID:", post._id);
+
+
   res.status(201).json({ message: "Post created", post });
 });
 
 export const getAllPosts = TryCatch(async (req, res) => {
-  const posts = await Post.find().populate("owner", "name email").sort({ createdAt: -1 });
+  const posts = await Post.find()
+  .populate("owner", "name email")
+  .populate("comments.user", "name")
+  .sort({ createdAt: -1 });
   res.json({ posts });
 });
 

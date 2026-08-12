@@ -5,10 +5,13 @@ import img3 from "./assets/images/img3.jpeg";
 import img4 from "./assets/images/img4.jpeg";
 import img5 from "./assets/images/img5.jpeg";
 import img7 from "./assets/images/img7.jpeg";
+import { CURRENT_USER_ID } from "../src/currentUser.js";
 import profilePic from "./assets/images/profile.jfif";
+import { usePosts } from "../src/context/PostsContext.jsx";
 
 export const CURRENT_USER = "Eiffa Tariq";
 export const CURRENT_USER_AVATAR = profilePic;
+
 
   export const posts = [
   {id:1, img:post1, cap:"enjoying this me time", user:"Eiffa Tariq", av:5, likes:214,owner:"Eiffa Tariq"},
@@ -20,13 +23,6 @@ export const CURRENT_USER_AVATAR = profilePic;
   {id:7, img:img7, cap:"enjoying this peaceful view", user:"Zoey Romanoff", av:8, likes:189,owner:"Zoey Romanoff"},
   {id:8, img:"https://picsum.photos/seed/nook2/500/420", cap:"Workahlic", user:"Ahsam Tariq", av:12, likes:98, owner:"Ahsam Tariq"},
   
-];
-
-export const candidates = [
-  {id:1, name:"Jiselle", age:26, img:"https://picsum.photos/seed/person1/500/650", bio:"Currently reading too many novels at once and taking the long way home. Always down for a gallery or a good playlist.", tags:["Photography","Long walks","Vinyl"], loc:"Sydney", dist:"1.4 km away", mutual:6},
-  {id:2, name:"Marcus", age:29, img:"https://picsum.photos/seed/person2/500/650", bio:"Building small things with wood and bigger things with code. Trying to get better at both.", tags:["Woodworking","Coffee","Hiking"], loc:"Melbourne", dist:"3.2 km away", mutual:2},
-  {id:3, name:"Ines", age:24, img:"https://picsum.photos/seed/person3/500/650", bio:"Here for the food photography and the occasional life update at 1am. Say hi.", tags:["Cooking","Film","Travel"], loc:"Brisbane", dist:"800 m away", mutual:11},
-  {id:4, name:"Theo", age:31, img:"https://picsum.photos/seed/person4/500/650", bio:"Trail running most weekends, terrible at replying to messages on time, sorry in advance.", tags:["Running","Dogs","Podcasts"], loc:"Perth", dist:"5.6 km away", mutual:4},
 ];
 
 export const activity = [

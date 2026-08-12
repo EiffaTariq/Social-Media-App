@@ -1,5 +1,12 @@
 const BASE_URL = "http://localhost:7000/api";
 
+
+export async function getAllUsers() {
+  const res = await fetch(`${BASE_URL}/user/all`);
+  if (!res.ok) throw new Error("Failed to load users");
+  const data = await res.json();
+  return data.users;
+}
 export async function getAllPosts() {
   const res = await fetch(`${BASE_URL}/post/all`);
   if (!res.ok) throw new Error("Failed to load posts");
