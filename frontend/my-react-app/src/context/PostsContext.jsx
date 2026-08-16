@@ -1,5 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAllPosts, createPost, likePost, addComment as apiAddComment, updatePostCaption, deletePostById } from "../api.js";
+import {
+  getAllPosts,
+  createPost,
+  likePost,
+  addComment as apiAddComment,
+  editComment as apiEditComment,
+  deleteComment as apiDeleteComment,
+  replyToComment as apiReplyToComment,
+  updatePostCaption,
+  deletePostById,
+} from "../api.js";
 
 const PostsContext = createContext(null);
 
@@ -7,7 +17,7 @@ export function PostsProvider({ children }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [actionError, setActionError] = useState(null); // moved inside
+  const [actionError, setActionError] = useState(null);
 
   useEffect(() => {
     getAllPosts()
@@ -51,8 +61,38 @@ export function PostsProvider({ children }) {
     setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
   };
 
+  const editPostComment = async (postId, commentId, comment) => {
+    const { post } = await apiEditComment(postId, commentId, comment);
+    setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
+  };
+
+  const removeComment = async (postId, commentId) => {
+    const { post } = await apiDeleteComment(postId, commentId);
+    setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
+  };
+
+  const replyComment = async (postId, commentId, userId, comment) => {
+    const { post } = await apiReplyToComment(postId, commentId, userId, comment);
+    setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
+  };
+
   return (
-    <PostsContext.Provider value={{ posts, loading, error, actionError, addPost, updatePost, deletePost, toggleLike, submitComment }}>
+    <PostsContext.Provider
+      value={{
+        posts,
+        loading,
+        error,
+        actionError,
+        addPost,
+        updatePost,
+        deletePost,
+        toggleLike,
+        submitComment,
+        editPostComment,
+        removeComment,
+        replyComment,
+      }}
+    >
       {children}
     </PostsContext.Provider>
   );

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { avatar } from "../data.js";
 import { usePosts } from "../context/PostsContext.jsx";
 import { CURRENT_USER_ID } from "../currentUser.js";
+import CommentItem from "../components/CommentItem.jsx";
 
 export default function PostDetailPage({ post, onBack }) {
   //const avatarSrc = post.owner === CURRENT_USER ? CURRENT_USER_AVATAR : avatar(post.av);
@@ -67,13 +68,11 @@ export default function PostDetailPage({ post, onBack }) {
         </form>
       )}
 
-      <div className="comment-list">
-        {post.comments?.map((c, i) => (
-          <p key={i} className="comment-item">
-            <b>{c.user?.name || "Someone"}:</b> {c.comment}
-          </p>
-        ))}
-      </div>
+    <div className="comment-list">
+    {post.comments?.map((c) => (
+    <CommentItem key={c._id} postId={post._id} comment={c} />
+    ))}
+    </div>
     </div>
   );
 }

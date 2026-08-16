@@ -27,6 +27,8 @@ export default function StatusRail({ onOpenStatusGroup }) {
   return (
     <div className="status-rail">
       {Object.values(grouped).map((group) => {
+        const owner = group[0].owner;
+        if (!owner) return null;
         const allSeen = group.every((s) => s.seenBy?.includes(CURRENT_USER_ID));
         const owner = group[0].owner;
         return (

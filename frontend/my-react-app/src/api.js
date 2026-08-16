@@ -50,16 +50,6 @@ export async function deletePostById(postId) {
   return res.json();
 }
 
-export async function addComment(postId, userId, comment) {
-  const res = await fetch(`${BASE_URL}/post/${postId}/comment`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, comment }),
-  });
-  if (!res.ok) throw new Error("Failed to add comment");
-  return res.json();
-}
-
 export async function createStatus(caption, ownerId, image) {
   const res = await fetch(`${BASE_URL}/status/new`, {
     method: "POST",
@@ -84,5 +74,43 @@ export async function markStatusSeen(statusId, userId) {
     body: JSON.stringify({ userId }),
   });
   if (!res.ok) throw new Error("Failed to mark status seen");
+  return res.json();
+}
+
+export async function addComment(postId, userId, comment) {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, comment }),
+  });
+  if (!res.ok) throw new Error("Failed to add comment");
+  return res.json();
+}
+
+export async function editComment(postId, commentId, comment) {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ comment }),
+  });
+  if (!res.ok) throw new Error("Failed to update comment");
+  return res.json();
+}
+
+export async function deleteComment(postId, commentId) {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete comment");
+  return res.json();
+}
+
+export async function replyToComment(postId, commentId, userId, comment) {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}/reply`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, comment }),
+  });
+  if (!res.ok) throw new Error("Failed to add reply");
   return res.json();
 }

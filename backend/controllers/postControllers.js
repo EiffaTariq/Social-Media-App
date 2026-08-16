@@ -68,6 +68,52 @@ export const addComment = TryCatch(async (req, res) => {
 
   post.comments.push({ user: userId, comment });
   await post.save();
-  await post.populate("comments.user", "name"); 
+  await post.populate("comments.user comments.replies.user", "name");
   res.json({ message: "Comment added", post });
+});
+
+export const editComment = TryCatch(async (req, res) => {
+  const { comment } = req.body;
+  if (!comment || typeof comment !== "string") {
+    return res.status(400).json({ message: "Comment text is required" });
+  }
+  const post = await Post.findById(req.params.id);
+  if (!post) return res.status(404).json({ message: "No post with this id" });
+
+  const target = post.comments.id(req.params.commentId);
+  if (!target) return res.status(404).json({ message: "No comment with this id" });
+
+  target.comment = comment;
+  await post.save();
+  await post.populate("comments.user comments.replies.user", "name");
+  res.json({ message: "Comment updated", post });
+});
+
+export const deleteComment = TryCatch(async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) return res.status(404).json({ message: "No post with this id" });
+
+  const target = post.comments.id(req.params.commentId);
+  if (!target) return res.status(404).json({ message: "No comment with this id" });
+
+  target.deleteOne();
+  await post.save();
+  await post.populate("comments.user comments.replies.user", "name");
+  res.json({ message: "Comment deleted", post });
+});
+
+export const replyToComment = TryCatch(async (req, res) => {
+  const { userId, comment } = req.body;
+  if (!userId || !comment) return res.status(400).json({ message: "userId and comment are required" });
+
+  const post = await Post.findById(req.params.id);
+  if (!post) return res.status(404).json({ message: "No post with this id" });
+
+  const target = post.comments.id(req.params.commentId);
+  if (!target) return res.status(404).json({ message: "No comment with this id" });
+
+  target.replies.push({ user: userId, comment });
+  await post.save();
+  await post.populate("comments.user comments.replies.user", "name");
+  res.json({ message: "Reply added", post });
 });
