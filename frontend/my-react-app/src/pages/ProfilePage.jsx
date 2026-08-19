@@ -6,13 +6,15 @@ import PostFormModal from "../components/PostFormModal.jsx";
 import DotMenu from "../components/DotMenu.jsx";
 import { useStatuses } from "../context/StatusContext.jsx";
 import myAvatar from "../assets/images/profile.jfif";
-import { CURRENT_USER_ID } from "../currentUser.js";
+import { useAuth } from "../context/AuthContext.jsx";
+//import { CURRENT_USER_ID } from "../currentUser.js";
 
 export default function ProfilePage() {
   const { posts, loading, error, addPost, updatePost, deletePost } = usePosts();
   const { addStatus, uploading } = useStatuses();
-  const myPosts = posts.filter((p) => p.owner?._id === CURRENT_USER_ID);
+  const myPosts = posts.filter((p) => p.owner?._id === user._id);
 
+  const { user } = useAuth();
   const [meError, setMeError] = useState(null);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState(null);
@@ -25,7 +27,7 @@ export default function ProfilePage() {
 
   const [me, setMe] = useState(null);
   useEffect(() => {
-    fetch(`http://localhost:7000/api/user/${CURRENT_USER_ID}`)
+    fetch(`http://localhost:7000/api/user/${user._id}`)
       .then(res => {
         if (!res.ok) throw new Error("Failed to load profile");
         return res.json();
@@ -50,7 +52,7 @@ export default function ProfilePage() {
     setCreating(true);
     setCreateError(null);
     try {
-      await addPost(cap, CURRENT_USER_ID, img);
+      await addPost(cap, user._id, img);
     } catch (err) {
       setCreateError("Couldn't create post. Try again.");
     } finally {
@@ -60,7 +62,7 @@ export default function ProfilePage() {
 
   async function handleAddStatus({ cap, img }) {
     try {
-      await addStatus(cap, CURRENT_USER_ID, img);
+      await addStatus(cap, user._id, img);
     } catch (err) {
       setActionError("Couldn't post status. Try again.");
     }
@@ -86,7 +88,7 @@ export default function ProfilePage() {
         <EditProfileModal
           user={me}
           onSubmit={async (data) => {
-            await fetch(`http://localhost:7000/api/user/${CURRENT_USER_ID}`, {
+            await fetch(`http://localhost:7000/api/user/${user._id}`, {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(data),

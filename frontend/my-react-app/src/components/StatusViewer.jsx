@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useStatuses } from "../context/StatusContext.jsx";
-import { CURRENT_USER_ID } from "../currentUser.js";
+//import { CURRENT_USER_ID } from "../currentUser.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function StatusViewer({ group, onClose }) {
   const { seeStatus } = useStatuses();
+  const { user } = useAuth();
   const [index, setIndex] = useState(0);
   const current = group[index];
 
   useEffect(() => {
     if (!current) return;
-    if (!current.seenBy?.includes(CURRENT_USER_ID)) {
-      seeStatus(current._id, CURRENT_USER_ID).catch(() => {});
+    if (!current.seenBy?.includes()) {
+      seeStatus(current._id, user._id).catch(() => {});
     }
   }, [current]);
 

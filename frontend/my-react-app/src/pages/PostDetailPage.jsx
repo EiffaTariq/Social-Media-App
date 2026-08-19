@@ -2,7 +2,8 @@ import Icon from "../icons/Icon.jsx";
 import { useState } from "react";
 import { avatar } from "../data.js";
 import { usePosts } from "../context/PostsContext.jsx";
-import { CURRENT_USER_ID } from "../currentUser.js";
+//import { CURRENT_USER_ID } from "../currentUser.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import CommentItem from "../components/CommentItem.jsx";
 
 export default function PostDetailPage({ post, onBack }) {
@@ -12,10 +13,11 @@ export default function PostDetailPage({ post, onBack }) {
   const [commentText, setCommentText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
    async function handleLike() {
     try {
-      await toggleLike(post._id, CURRENT_USER_ID);
+      await toggleLike(post._id, user._id);
     } catch (err) {
       setError("Couldn't like this post. Try again.");
     }
@@ -26,7 +28,7 @@ export default function PostDetailPage({ post, onBack }) {
     setSubmitting(true);
     setError(null);
     try {
-      await submitComment(post._id, CURRENT_USER_ID, commentText.trim());
+      await submitComment(post._id, user._id, commentText.trim());
       setCommentText("");
       setShowCommentBox(false);
     } catch (err) {

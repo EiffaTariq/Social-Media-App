@@ -2,20 +2,20 @@ const BASE_URL = "http://localhost:7000/api";
 
 
 export async function getAllUsers() {
-  const res = await fetch(`${BASE_URL}/user/all`);
+  const res = await fetch(`${BASE_URL}/user/all`, { credentials: "include" });
   if (!res.ok) throw new Error("Failed to load users");
   const data = await res.json();
   return data.users;
 }
 export async function getAllPosts() {
-  const res = await fetch(`${BASE_URL}/post/all`);
+  const res = await fetch(`${BASE_URL}/post/all`, { credentials: "include" });
   if (!res.ok) throw new Error("Failed to load posts");
   const data = await res.json();
   return data.posts;
 }
 
 export async function createPost(caption, ownerId, image) {
-  const res = await fetch(`${BASE_URL}/post/new`, {
+  const res = await fetch(`${BASE_URL}/post/new`, { credentials: "include" } , {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ caption, ownerId, image }),
@@ -25,7 +25,7 @@ export async function createPost(caption, ownerId, image) {
 }
 
 export async function likePost(postId, userId) {
-  const res = await fetch(`${BASE_URL}/post/${postId}/like`, {
+  const res = await fetch(`${BASE_URL}/post/${postId}/like`, { credentials: "include" }, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId }),
@@ -35,7 +35,7 @@ export async function likePost(postId, userId) {
 }
 
 export async function updatePostCaption(postId, caption) {
-  const res = await fetch(`${BASE_URL}/post/${postId}`, {
+  const res = await fetch(`${BASE_URL}/post/${postId}`, { credentials: "include" }, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ caption }),
@@ -45,13 +45,13 @@ export async function updatePostCaption(postId, caption) {
 }
 
 export async function deletePostById(postId) {
-  const res = await fetch(`${BASE_URL}/post/${postId}`, { method: "DELETE" });
+  const res = await fetch(`${BASE_URL}/post/${postId}`, { method: "DELETE" }, { credentials: "include" });
   if (!res.ok) throw new Error("Failed to delete post");
   return res.json();
 }
 
 export async function createStatus(caption, ownerId, image) {
-  const res = await fetch(`${BASE_URL}/status/new`, {
+  const res = await fetch(`${BASE_URL}/status/new`, { credentials: "include" }, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ caption, ownerId, image }),
@@ -61,14 +61,14 @@ export async function createStatus(caption, ownerId, image) {
 }
 
 export async function getAllStatuses() {
-  const res = await fetch(`${BASE_URL}/status/all`);
+  const res = await fetch(`${BASE_URL}/status/all`, { credentials: "include" });
   if (!res.ok) throw new Error("Failed to load statuses");
   const data = await res.json();
   return data.statuses;
 }
 
 export async function markStatusSeen(statusId, userId) {
-  const res = await fetch(`${BASE_URL}/status/${statusId}/seen`, {
+  const res = await fetch(`${BASE_URL}/status/${statusId}/seen`, { credentials: "include" }, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId }),
@@ -78,7 +78,7 @@ export async function markStatusSeen(statusId, userId) {
 }
 
 export async function addComment(postId, userId, comment) {
-  const res = await fetch(`${BASE_URL}/post/${postId}/comment`, {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment`, { credentials: "include" }, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, comment }),
@@ -88,7 +88,7 @@ export async function addComment(postId, userId, comment) {
 }
 
 export async function editComment(postId, commentId, comment) {
-  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}`, {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}`, { credentials: "include" }, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ comment }),
@@ -98,7 +98,7 @@ export async function editComment(postId, commentId, comment) {
 }
 
 export async function deleteComment(postId, commentId) {
-  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}`, {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}`, { credentials: "include" }, {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("Failed to delete comment");
@@ -106,7 +106,7 @@ export async function deleteComment(postId, commentId) {
 }
 
 export async function replyToComment(postId, commentId, userId, comment) {
-  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}/reply`, {
+  const res = await fetch(`${BASE_URL}/post/${postId}/comment/${commentId}/reply`, { credentials: "include" }, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, comment }),

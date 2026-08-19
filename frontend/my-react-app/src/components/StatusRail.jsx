@@ -1,19 +1,12 @@
-// {Object.values(groupedByOwner).map((userStatuses) => {
-//   const allSeen = userStatuses.every((s) => s.seenBy.includes(CURRENT_USER_ID));
-//   return (
-//     <div key={userStatuses[0].owner._id} className={allSeen ? "status-ring-seen" : "status-ring-unseen"}>
-//       <img src={userStatuses[0].owner.profilePic?.url} onClick={() => openStatusViewer(userStatuses)} />
-//     </div>
-//   );
-// })}
 
-// frontend/my-react-app/src/components/StatusRail.jsx
+import { User } from "../../../../backend/models/userModel.js";
 import { useStatuses } from "../context/StatusContext.jsx";
-import { CURRENT_USER_ID } from "../currentUser.js";
+//import { CURRENT_USER_ID } from "../currentUser.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function StatusRail({ onOpenStatusGroup }) {
   const { statuses, loading } = useStatuses();
-
+  const { user } = useAuth();
   if (loading || statuses.length === 0) return null;
 
   const grouped = {};
@@ -29,7 +22,7 @@ export default function StatusRail({ onOpenStatusGroup }) {
       {Object.values(grouped).map((group) => {
         const owner = group[0].owner;
         if (!owner) return null;
-        const allSeen = group.every((s) => s.seenBy?.includes(CURRENT_USER_ID));
+        const allSeen = group.every((s) => s.seenBy?.includes(user._id));
         const owner = group[0].owner;
         return (
           <button

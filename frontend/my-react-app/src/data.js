@@ -5,7 +5,7 @@ import img3 from "./assets/images/img3.jpeg";
 import img4 from "./assets/images/img4.jpeg";
 import img5 from "./assets/images/img5.jpeg";
 import img7 from "./assets/images/img7.jpeg";
-import { CURRENT_USER_ID } from "../src/currentUser.js";
+//import { CURRENT_USER_ID } from "../src/currentUser.js";
 import profilePic from "./assets/images/profile.jfif";
 import { usePosts } from "../src/context/PostsContext.jsx";
 

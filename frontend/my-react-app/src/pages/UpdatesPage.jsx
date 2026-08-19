@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Icon from "../icons/Icon.jsx";
 import { useStatuses } from "../context/StatusContext.jsx";
-import { CURRENT_USER_ID } from "../currentUser.js";
+//import { CURRENT_USER_ID } from "../currentUser.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import myAvatar from "../assets/images/profile.jfif";
 import PostFormModal from "../components/PostFormModal.jsx";
 
@@ -18,10 +19,11 @@ export default function UpdatesPage({ onOpenStatusGroup }) {
   const [showAddStatus, setShowAddStatus] = useState(false);
   const [addError, setAddError] = useState(null);
   const [viewedOpen, setViewedOpen] = useState(false);
-
+  const { user } = useAuth();
+  
   async function handleAddStatus({ cap, img }) {
     try {
-      await addStatus(cap, CURRENT_USER_ID, img);
+      await addStatus(cap, user._id, img);
     } catch {
       setAddError("Couldn't post status. Try again.");
     }
@@ -44,16 +46,16 @@ export default function UpdatesPage({ onOpenStatusGroup }) {
     grouped[ownerId].push(s);
   });
 
-  const myGroup = grouped[CURRENT_USER_ID] || [];
+  const myGroup = grouped[user._id] || [];
   const otherGroups = Object.values(grouped).filter(
-    (g) => g[0].owner?._id !== CURRENT_USER_ID
+    (g) => g[0].owner?._id !== user._id
   );
 
   const recent = [];
   const viewed = [];
   otherGroups.forEach((g) => {
     const sorted = [...g].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    const allSeen = sorted.every((s) => s.seenBy?.includes(CURRENT_USER_ID));
+    const allSeen = sorted.every((s) => s.seenBy?.includes(user._id));
     (allSeen ? viewed : recent).push(sorted);
   });
 

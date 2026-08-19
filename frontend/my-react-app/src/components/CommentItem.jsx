@@ -1,18 +1,20 @@
 import { useState } from "react";
 import DotMenu from "./DotMenu.jsx";
 import { usePosts } from "../context/PostsContext.jsx";
-import { CURRENT_USER_ID } from "../currentUser.js";
+//import { CURRENT_USER_ID } from "../currentUser.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function CommentItem({ postId, comment }) {
   const { editPostComment, removeComment, replyComment } = usePosts();
 
+  const { user } = useAuth();
   const [mode, setMode] = useState(null); // null | "edit" | "reply"
   const [text, setText] = useState(comment.comment);
   const [replyText, setReplyText] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
 
-  const isOwner = comment.user?._id === CURRENT_USER_ID;
+  const isOwner = comment.user?._id === user._id;
 
   async function handleSaveEdit(e) {
     e.preventDefault();
@@ -46,7 +48,7 @@ export default function CommentItem({ postId, comment }) {
     setBusy(true);
     setError(null);
     try {
-      await replyComment(postId, comment._id, CURRENT_USER_ID, replyText.trim());
+      await replyComment(postId, comment._id, user._id, replyText.trim());
       setReplyText("");
       setMode(null);
     } catch {

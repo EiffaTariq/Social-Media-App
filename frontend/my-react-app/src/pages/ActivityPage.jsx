@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { usePosts } from "../context/PostsContext.jsx";
 import { getAllUsers } from "../api.js";
-import { CURRENT_USER_ID } from "../currentUser.js";
+//import { CURRENT_USER_ID } from "../currentUser.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const TABS = [
   ["all", "All"],
@@ -15,6 +16,7 @@ export default function ActivityPage() {
   const [tab, setTab] = useState("all");
   const [users, setUsers] = useState([]);
   const { posts } = usePosts();
+  const { user } = useAuth();
 
   const avatarFor = (userId) => `https://i.pravatar.cc/150?u=${userId}`;
 
@@ -25,11 +27,11 @@ export default function ActivityPage() {
 
   const userMap = Object.fromEntries(users.map((u) => [u._id, u.name]));
 
-  const myPosts = posts.filter((p) => p.owner?._id === CURRENT_USER_ID);
+  const myPosts = posts.filter((p) => p.owner?._id === user._id);
 
   const likeActivity = myPosts.flatMap((p) =>
     (p.likes || [])
-      .filter((uid) => uid !== CURRENT_USER_ID)
+      .filter((uid) => uid !== user._id)
       .map((uid) => ({
         id: `like-${p._id}-${uid}`,
         type: "like",
@@ -51,7 +53,7 @@ export default function ActivityPage() {
     }))
   );
 
-  const me = users.find((u) => u._id === CURRENT_USER_ID);
+  const me = users.find((u) => u._id === user._id);
   const followActivity = (me?.followers || []).map((f) => ({
     id: `follow-${f._id || f}`,
     type: "follow",
