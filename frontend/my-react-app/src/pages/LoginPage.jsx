@@ -40,23 +40,52 @@ export default function LoginPage({ onSwitchToSignup }) {
         <h2>Login</h2>
         {serverError && <p className="auth-error">{serverError}</p>}
 
-        <input
+        <div className="field">
+        <span className="field-label">Email</span>
+        <div className="field-row">
+          <Icon.Mail width={16} height={16} />
+          <input
+            type="email"
+            placeholder="you@example.com"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+          />
+        </div>
+        {errors.email && <span className="auth-error">{errors.email}</span>}
+      </div>
+
+        {/* <input
           type="email"
           placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
-        {errors.email && <span className="auth-error">{errors.email}</span>}
+        {errors.email && <span className="auth-error">{errors.email}</span>} */}
 
-        <input
+        {/* <input
           type="password"
           placeholder="Password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
-        {errors.password && <span className="auth-error">{errors.password}</span>}
+        /> */}
+        
+        {/* {errors.password && <span className="auth-error">{errors.password}</span>} */}
+        <div className="field">
+        <span className="field-label">Password</span>
+          <div className="field-row">
+            <Icon.Lock width={16} height={16} />
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+            />
+            <button type="button" className="field-forgot">Forgot?</button>
+          </div>
+          {errors.password && <span className="auth-error">{errors.password}</span>}
+        </div>
 
-        <button type="submit" disabled={loading}>
+        {/* <button type="submit" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
         <p>
@@ -64,7 +93,18 @@ export default function LoginPage({ onSwitchToSignup }) {
           <button type="button" className="link-btn" onClick={onSwitchToSignup}>
             Sign up
           </button>
-        </p>
+        </p> */}
+        <div className="auth-bottom-row">
+          <span>
+    No account?{" "}
+    <button type="button" className="link-btn" onClick={onSwitchToSignup}>
+      Signup
+    </button>
+          </span>
+          <button type="submit" disabled={loading}>
+            {loading ? "..." : "Login"}
+          </button>
+        </div>
       </form>
     </div>
   );
