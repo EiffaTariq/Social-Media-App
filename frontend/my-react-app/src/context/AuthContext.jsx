@@ -37,16 +37,18 @@ export function AuthProvider({ children }) {
     return data.user;
   };
 
-  const signup = async (name, email, password, gender) => {
+  // NOTE: signup intentionally does NOT log the user in / does NOT set `user`.
+  // The backend no longer issues a token on registration, so the person is
+  // sent back to the login form to sign in with their new credentials.
+  const signup = async (name, username, email, password, gender, bio, profilePic) => {
     const res = await fetch(`${BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ name, email, password, gender }),
+      body: JSON.stringify({ name, username, email, password, gender, bio, profilePic }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Signup failed");
-    setUser(data.user);
     return data.user;
   };
 
@@ -56,7 +58,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, refreshUser: fetchMe, setUser }}>
       {children}
     </AuthContext.Provider>
   );

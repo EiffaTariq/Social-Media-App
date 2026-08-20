@@ -32,7 +32,20 @@ export default function App() {
   const selectedPost = posts.find((p) => p._id === selectedPostId) || null;
   const [active, setActive] = useState("feed");
   const [statusGroup, setStatusGroup] = useState(null);
+  // When set, the Profile page shows this user (e.g. opened from search)
+  // instead of the logged-in person's own profile.
+  const [viewedUserId, setViewedUserId] = useState(null);
   const Page = PAGES[active];
+
+  const goToProfile = (id) => {
+    setViewedUserId(id);
+    setActive("profile");
+  };
+
+  const handleSetActive = (key) => {
+    if (key === "profile") setViewedUserId(null);
+    setActive(key);
+  };
 
   if (loading) return <div className="app-loading">Loading...</div>;
 
@@ -46,17 +59,19 @@ export default function App() {
 
   return (
     <div className="shell">
-      <Rail active={active} setActive={setActive} />
+      <Rail active={active} setActive={handleSetActive} />
       <main className="main">
-        <TopBar />
+        <TopBar onOpenProfile={goToProfile} />
         {selectedPost
         ? <PostDetailPage post={selectedPost} onBack={() => setSelectedPostId(null)} />
+        : active === "profile"
+        ? <Page userId={viewedUserId} onOpenPost={(p) => setSelectedPostId(p._id)} onOpenStatusGroup={setStatusGroup} />
         : <Page onOpenPost={(p) => setSelectedPostId(p._id)} onOpenStatusGroup={setStatusGroup} />}
         {statusGroup && (
         <StatusViewer group={statusGroup} onClose={() => setStatusGroup(null)} />
         )}
       </main>
-      <BottomNav active={active} setActive={setActive} />
+      <BottomNav active={active} setActive={handleSetActive} />
       {uploading && (
         <div className="status-upload-bar">
           <span className="status-upload-spinner" />

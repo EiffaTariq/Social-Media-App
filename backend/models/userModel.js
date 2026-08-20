@@ -6,6 +6,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      minlength: 3,
+      maxlength: 24,
+      match: /^[a-z0-9_.]+$/,
+    },
     email: {
       type: String,
       required: true,
@@ -19,6 +29,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ["male", "female"],
+    },
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 160,
     },
     followers: [
       {

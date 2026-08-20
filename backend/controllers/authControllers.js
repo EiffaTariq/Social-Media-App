@@ -4,32 +4,44 @@ import TryCatch from "../utils/TryCatch.js";
 import generateToken from "../utils/generareToken.js";
 
 export const registerUser = TryCatch(async (req, res) => {
-  const { name, email, password, gender } = req.body;
+  const { name, username, email, password, gender, bio, profilePic } = req.body;
 
-  if (!name || !email || !password || !gender) {
+  if (!name || !username || !email || !password || !gender) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  const existing = await User.findOne({ email });
-  if (existing) {
+  if (!/^[a-zA-Z0-9_.]{3,24}$/.test(username)) {
+    return res.status(400).json({
+      message: "Username must be 3-24 characters and contain only letters, numbers, '.' or '_'",
+    });
+  }
+
+  const existingEmail = await User.findOne({ email });
+  if (existingEmail) {
     return res.status(400).json({ message: "User already exists" });
+  }
+
+  const existingUsername = await User.findOne({ username: username.toLowerCase() });
+  if (existingUsername) {
+    return res.status(400).json({ message: "Username is already taken" });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await User.create({
     name,
+    username: username.toLowerCase(),
     email,
     password: hashedPassword,
     gender,
+    bio,
+    profilePic,
   });
-
-  generateToken(user._id, res);
 
   const userSafe = user.toObject();
   delete userSafe.password;
 
-  res.status(201).json({ message: "User registered", user: userSafe });
+  res.status(201).json({ message: "User registered. Please log in.", user: userSafe });
 });
 
 export const loginUser = TryCatch(async (req, res) => {

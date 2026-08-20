@@ -2,7 +2,7 @@ import { Post } from "../models/postModel.js";
 import TryCatch from "../utils/TryCatch.js";
 
 export const newPost = TryCatch(async (req, res) => {
-   console.log("POST /api/post/new hit");
+  console.log("POST /api/post/new hit");
   console.log("Request body:", req.body);
   const { caption, ownerId, image } = req.body;
   if (!caption || !ownerId) {

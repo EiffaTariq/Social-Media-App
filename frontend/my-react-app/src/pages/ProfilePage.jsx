@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react";
 import Icon from "../icons/Icon.jsx";
 import { usePosts } from "../context/PostsContext.jsx";
-import { avatar } from "../data.js";
 import PostFormModal from "../components/PostFormModal.jsx";
 import DotMenu from "../components/DotMenu.jsx";
 import { useStatuses } from "../context/StatusContext.jsx";
-import myAvatar from "../assets/images/profile.jfif";
 import { useAuth } from "../context/AuthContext.jsx";
-//import { CURRENT_USER_ID } from "../currentUser.js";
+import { getUserById, updateUserProfile, toggleFollowUser } from "../api.js";
 
-export default function ProfilePage() {
+const FALLBACK_AVATAR = "https://api.dicebear.com/7.x/initials/svg?seed=";
+
+export default function ProfilePage({ userId }) {
+  const { user, refreshUser } = useAuth();
+  const viewingOwnProfile = !userId || userId === user?._id;
+  const targetId = userId || user?._id;
+
   const { posts, loading, error, addPost, updatePost, deletePost } = usePosts();
   const { addStatus, uploading } = useStatuses();
-  const myPosts = posts.filter((p) => p.owner?._id === user._id);
 
-  const { user } = useAuth();
+  const [me, setMe] = useState(null);
   const [meError, setMeError] = useState(null);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState(null);
@@ -24,17 +27,19 @@ export default function ProfilePage() {
   const [actionError, setActionError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [followBusy, setFollowBusy] = useState(false);
 
-  const [me, setMe] = useState(null);
   useEffect(() => {
-    fetch(`http://localhost:7000/api/user/${user._id}`)
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load profile");
-        return res.json();
-      })
+    if (!targetId) return;
+    setMe(null);
+    setMeError(null);
+    getUserById(targetId)
       .then(setMe)
       .catch((err) => setMeError(err.message));
-  }, []);
+  }, [targetId]);
+
+  const myPosts = posts.filter((p) => p.owner?._id === targetId);
+  const isFollowing = me?.followers?.some((f) => (f._id || f) === user?._id);
 
   async function handleDeletePost(post) {
     setActionError(null);
@@ -53,7 +58,7 @@ export default function ProfilePage() {
     setCreateError(null);
     try {
       await addPost(cap, user._id, img);
-    } catch (err) {
+    } catch {
       setCreateError("Couldn't create post. Try again.");
     } finally {
       setCreating(false);
@@ -63,49 +68,75 @@ export default function ProfilePage() {
   async function handleAddStatus({ cap, img }) {
     try {
       await addStatus(cap, user._id, img);
-    } catch (err) {
+    } catch {
       setActionError("Couldn't post status. Try again.");
     }
   }
 
+  async function handleToggleFollow() {
+    if (!me) return;
+    setFollowBusy(true);
+    try {
+      await toggleFollowUser(me._id);
+      const fresh = await getUserById(me._id);
+      setMe(fresh);
+      refreshUser?.();
+    } catch (err) {
+      setActionError(err.message || "Couldn't update follow status.");
+    } finally {
+      setFollowBusy(false);
+    }
+  }
+
+  const avatarSrc = me?.profilePic?.url || `${FALLBACK_AVATAR}${me?.username || "user"}`;
+
   return (
     <div>
       <div className="cover">
-        <img src={myAvatar} alt="You" />
+        <img src={avatarSrc} alt={me?.name || "User"} />
       </div>
-      <h2 className="profile-name">{me?.name || "Loading..."}</h2>
-      <p className="profile-handle">@iffy · Lahore, Pakistan</p>
-      <p className="profile-bio">
-        Collecting corners worth remembering — cafés, staircases, and the moments. Here mostly for the photos.
-      </p>
+      <h2 className="profile-name">{me?.name || (meError ? "User not found" : "Loading...")}</h2>
+      {me?.username && <p className="profile-handle">@{me.username}</p>}
+      {me?.bio && <p className="profile-bio">{me.bio}</p>}
+
       <div className="stat-row">
-        <div><b>142</b><span>POSTS</span></div>
-        <div><b>2.4k</b><span>FOLLOWERS</span></div>
-        <div><b>318</b><span>FOLLOWING</span></div>
+        <div><b>{myPosts.length}</b><span>POSTS</span></div>
+        <div><b>{me?.followers?.length ?? 0}</b><span>FOLLOWERS</span></div>
+        <div><b>{me?.followings?.length ?? 0}</b><span>FOLLOWING</span></div>
       </div>
-      <button className="edit-btn" onClick={() => setShowEditProfile(true)}>Edit profile</button>
+
+      {viewingOwnProfile ? (
+        <button className="edit-btn" onClick={() => setShowEditProfile(true)}>
+          Edit profile
+        </button>
+      ) : (
+        <button className="edit-btn" onClick={handleToggleFollow} disabled={followBusy}>
+          {followBusy ? "..." : isFollowing ? "Unfollow" : "Follow"}
+        </button>
+      )}
+
       {showEditProfile && (
         <EditProfileModal
           user={me}
           onSubmit={async (data) => {
-            await fetch(`http://localhost:7000/api/user/${user._id}`, {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(data),
-            });
-            setMe((prev) => ({ ...prev, ...data }));
+            const { user: updated } = await updateUserProfile(user._id, data);
+            setMe(updated);
+            refreshUser?.();
           }}
           onClose={() => setShowEditProfile(false)}
         />
       )}
-      <div className="profile-actions">
-        <button className="action-btn" onClick={() => setShowAddPost(true)}>
-          <Icon.Plus /> Add post
-        </button>
-        <button className="action-btn" onClick={() => setShowAddStatus(true)}>
-          <Icon.Star /> Add status
-        </button>
-      </div>
+
+      {viewingOwnProfile && (
+        <div className="profile-actions">
+          <button className="action-btn" onClick={() => setShowAddPost(true)}>
+            <Icon.Plus /> Add post
+          </button>
+          <button className="action-btn" onClick={() => setShowAddStatus(true)}>
+            <Icon.Star /> Add status
+          </button>
+        </div>
+      )}
       {actionError && <p className="error-text">{actionError}</p>}
 
       <div className="grid3">
@@ -117,13 +148,15 @@ export default function ProfilePage() {
           >
             <img src={p.image} alt={p.caption} loading="lazy" />
             <div className="grid-tile-caption">{p.caption}</div>
-            <DotMenu
-              className="grid-tile-menu"
-              options={[
-                { label: "Edit", onClick: () => setEditingPost(p) },
-                { label: "Delete", onClick: () => handleDeletePost(p), danger: true },
-              ]}
-            />
+            {viewingOwnProfile && (
+              <DotMenu
+                className="grid-tile-menu"
+                options={[
+                  { label: "Edit", onClick: () => setEditingPost(p) },
+                  { label: "Delete", onClick: () => handleDeletePost(p), danger: true },
+                ]}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -142,6 +175,63 @@ export default function ProfilePage() {
           onClose={() => setEditingPost(null)}
         />
       )}
+    </div>
+  );
+}
+
+function EditProfileModal({ user, onSubmit, onClose }) {
+  const [name, setName] = useState(user?.name || "");
+  const [username, setUsername] = useState(user?.username || "");
+  const [bio, setBio] = useState(user?.bio || "");
+  const [preview, setPreview] = useState(user?.profilePic?.url || null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  function handleFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setPreview(reader.result);
+    reader.readAsDataURL(file);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setSaving(true);
+    try {
+      await onSubmit({
+        name,
+        username,
+        bio,
+        profilePic: preview ? { url: preview } : undefined,
+      });
+      onClose();
+    } catch (err) {
+      setError(err.message || "Couldn't update profile.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <form className="modal-card" onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
+        <h3>Edit profile</h3>
+        {error && <p className="auth-error">{error}</p>}
+
+        {preview && <img src={preview} alt="" className="modal-preview" />}
+        <input type="file" accept="image/*" onChange={handleFile} />
+
+        <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+        <input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value.trim())} />
+        <textarea placeholder="Bio" value={bio} maxLength={160} onChange={(e) => setBio(e.target.value)} />
+
+        <div className="modal-actions">
+          <button type="button" onClick={onClose}>Cancel</button>
+          <button type="submit" disabled={saving}>{saving ? "Saving..." : "Save changes"}</button>
+        </div>
+      </form>
     </div>
   );
 }

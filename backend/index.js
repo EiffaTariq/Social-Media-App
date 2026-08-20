@@ -22,10 +22,6 @@ app.use(cookieParser());
 
 const PORT = process.env.PORT || 7000;
 
-
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`); //ro get renders port
-});
 app.get('/', (req, res) => {
   res.send('Server is working');
 });
@@ -38,6 +34,7 @@ app.use("/api/auth", authRoutes);
 connectDb()
   .then(() => console.log('DB connected'))
   .catch((error) => console.error('DB connection failed:', error));
-app.listen(PORT, () => {
-  console.log(`✅ Server started on port ${PORT}`);
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server started on port ${PORT}`);
 });
