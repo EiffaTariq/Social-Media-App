@@ -80,7 +80,17 @@ export default function TopBar({ onOpenProfile }) {
         )}
       </div>
       <button className="icon-btn" onClick={logout} title="Logout">
-        <Icon.Bell style={{ width: 17, height: 17 }} />
+        <img
+          src={Icon.logout}
+          alt="Logout"
+          style={{
+          width: "150%",
+          height: "115%",
+          padding: 0,
+          borderRadius: "50%",
+          objectFit: "cover",
+        }}
+        />
       </button>
     </div>
   );

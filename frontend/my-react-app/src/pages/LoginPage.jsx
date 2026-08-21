@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import Icon from "../icons/Icon.jsx";
 
 export default function LoginPage({ onSwitchToSignup }) {
   const { login } = useAuth();

@@ -26,7 +26,7 @@ export default function SignupPage({ onSwitchToLogin }) {
       errs.username = "3-24 characters, letters/numbers/underscore/dot only";
 
     if (!form.email.trim()) errs.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = "Enter a valid email";
+    else if (!/^[A-Za-z0-9._%+-]+@gmail\.com$/.test(form.email)) errs.email = "Enter a valid email";
 
     if (!form.password) errs.password = "Password is required";
     else if (form.password.length < 6) errs.password = "Password must be at least 6 characters";
