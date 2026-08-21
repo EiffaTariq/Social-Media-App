@@ -7,7 +7,7 @@ import {
   editComment as apiEditComment,
   deleteComment as apiDeleteComment,
   replyToComment as apiReplyToComment,
-  updatePostCaption,
+  updatePost as apiUpdatePost,
   deletePostById,
 } from "../api.js";
 
@@ -15,6 +15,7 @@ const PostsContext = createContext(null);
 
 export function PostsProvider({ children }) {
   const [posts, setPosts] = useState([]);
+  const [updatingPost, setUpdatingPost] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionError, setActionError] = useState(null);
@@ -31,15 +32,26 @@ export function PostsProvider({ children }) {
     setPosts((prev) => [post, ...prev]);
   };
 
-  const updatePost = async (postId, caption) => {
-    try {
-      const { post } = await updatePostCaption(postId, caption);
-      setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
-    } catch (err) {
-      setActionError(err.message);
-      throw err;
-    }
-  };
+//   const updatePost = async (postId, data) => {
+//   const { post } = await apiUpdatePost(postId, data);
+//   setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
+//   return post;
+// };
+const updatePost = async (postId, data) => {
+  setUpdatingPost(true);
+
+  try {
+    const { post } = await apiUpdatePost(postId, data);
+
+    setPosts((prev) =>
+      prev.map((p) => (p._id === postId ? post : p))
+    );
+
+    return post;
+  } finally {
+    setUpdatingPost(false);
+  }
+};
 
   const deletePost = async (postId) => {
     try {
@@ -77,23 +89,40 @@ export function PostsProvider({ children }) {
   };
 
   return (
+    // <PostsContext.Provider
+    //   value={{
+    //     posts,
+    //     loading,
+    //     error,
+    //     actionError,
+    //     addPost,
+    //     updatePost,
+    //     deletePost,
+    //     toggleLike,
+    //     submitComment,
+    //     editPostComment,
+    //     removeComment,
+    //     replyComment,
+    //   }}
+    // >
     <PostsContext.Provider
-      value={{
-        posts,
-        loading,
-        error,
-        actionError,
-        addPost,
-        updatePost,
-        deletePost,
-        toggleLike,
-        submitComment,
-        editPostComment,
-        removeComment,
-        replyComment,
-      }}
-    >
-      {children}
+    value={{
+      posts,
+      loading,
+      error,
+      actionError,
+      updatingPost,
+      addPost,
+      updatePost,
+      deletePost,
+      toggleLike,
+      submitComment,
+      editPostComment,
+      removeComment,
+      replyComment,
+    }}
+  >
+    {children}
     </PostsContext.Provider>
   );
 }

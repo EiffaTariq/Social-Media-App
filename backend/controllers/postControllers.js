@@ -17,6 +17,73 @@ export const newPost = TryCatch(async (req, res) => {
   res.status(201).json({ message: "Post created", post });
 });
 
+const VISIBILITY_VALUES = ["public", "friends", "private"];
+
+export const editPost = TryCatch(async (req, res) => {
+  const { caption, visibility, location, eventDate, altText, image } = req.body;
+  const errors = {};
+
+  // caption
+  if (!caption || typeof caption !== "string" || !caption.trim()) {
+    errors.caption = "Caption is required";
+  } else if (caption.trim().length < 3) {
+    errors.caption = "Caption must be at least 3 characters";
+  } else if (caption.trim().length > 500) {
+    errors.caption = "Caption cannot exceed 500 characters";
+  }
+  // visibility (dropdown)
+  if (!visibility || !VISIBILITY_VALUES.includes(visibility)) {
+    errors.visibility = "Select a valid visibility option";
+  }
+  // eventDate (date, optional but can't be in the future)
+  if (eventDate) {
+    const parsed = new Date(eventDate);
+    if (isNaN(parsed.getTime())) {
+      errors.eventDate = "Enter a valid date";
+    } else if (parsed > new Date()) {
+      errors.eventDate = "Date cannot be in the future";
+    }
+  }
+  if (image) {
+    const isValidImage = /^data:image\/(jpeg|jpg|png|webp);base64,/.test(image);
+    if (!isValidImage) {
+      errors.image = "Image must be a JPEG, PNG, or WEBP file";
+    } else {
+      // rough size check: base64 length * 0.75 ≈ decoded bytes
+      const approxBytes = image.length * 0.75;
+      if (approxBytes > 5 * 1024 * 1024) {
+        errors.image = "Image must be smaller than 5MB";
+      }
+    }
+  }
+
+  // altText required only if an image is present on the post after this edit
+  const post = await Post.findById(req.params.id);
+  if (!post) return res.status(404).json({ message: "No post with this id" });
+
+  const willHaveImage = image || post.image;
+  if (willHaveImage && altText && altText.length > 150) {
+    errors.altText = "Alt text cannot exceed 150 characters";
+  }
+  if (willHaveImage && !altText && !post.altText) {
+    errors.altText = "Alt text is required when an image is attached";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({ message: "Validation failed", errors });
+  }
+
+  post.caption = caption.trim();
+  post.visibility = visibility;
+  post.location = location?.trim() || "";
+  post.eventDate = eventDate || post.eventDate;
+  post.altText = altText?.trim() || post.altText || "";
+  if (image) post.image = image;
+
+  await post.save();
+  res.json({ message: "Post updated", post });
+});
+
 export const getAllPosts = TryCatch(async (req, res) => {
   const posts = await Post.find()
   .populate("owner", "name email")

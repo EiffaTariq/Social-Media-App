@@ -1,13 +1,14 @@
 import express from 'express';
 import isAuth from "../middleware/isAuth.js";
-import { deletePost, newPost, 
-    editCaption, getAllPosts, likeUnlikePost, addComment, editComment, 
-    deleteComment, replyToComment } from '../controllers/postControllers.js';
+import { deletePost, newPost,
+    editPost, getAllPosts, likeUnlikePost, addComment, editComment,
+    editCaption,deleteComment, replyToComment } from '../controllers/postControllers.js';
 
 const router = express.Router();
 
 router.post('/new', isAuth, newPost);
 router.get("/all", getAllPosts);
+router.put('/:id', isAuth, editPost);
 router.put('/:id', isAuth, editCaption);
 router.delete('/:id',isAuth, deletePost);
 router.post('/:id/like', isAuth, likeUnlikePost);

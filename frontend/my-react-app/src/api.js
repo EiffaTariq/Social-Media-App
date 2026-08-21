@@ -73,15 +73,20 @@ export async function likePost(postId, userId) {
   return res.json();
 }
 
-export async function updatePostCaption(postId, caption) {
+export async function updatePost(postId, data) {
   const res = await fetch(`${BASE_URL}/post/${postId}`, {
     method: "PUT",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ caption }),
+    body: JSON.stringify(data),
   });
-  if (!res.ok) throw new Error("Failed to update post");
-  return res.json();
+  const result = await res.json();
+  if (!res.ok) {
+    const err = new Error(result.message || "Failed to update post");
+    err.fieldErrors = result.errors || null;
+    throw err;
+  }
+  return result;
 }
 
 export async function deletePostById(postId) {

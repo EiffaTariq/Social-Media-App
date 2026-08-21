@@ -19,6 +19,14 @@ const commentSchema = new mongoose.Schema(
 const postSchema = new mongoose.Schema({
   caption: { type: String, required: true },
   image: { type: String },
+   visibility: {
+    type: String,
+    enum: ["public", "friends", "private"],
+    default: "public",
+  },
+  location: { type: String, default: "" },
+  eventDate: { type: Date },
+  altText: { type: String, default: "" },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   comments: [commentSchema],

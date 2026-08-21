@@ -5,6 +5,7 @@ import PostFormModal from "../components/PostFormModal.jsx";
 import DotMenu from "../components/DotMenu.jsx";
 import { useStatuses } from "../context/StatusContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import EditPostForm from "../components/EditPostForm.jsx";
 import { getUserById, updateUserProfile, toggleFollowUser } from "../api.js";
 
 const FALLBACK_AVATAR = "https://api.dicebear.com/7.x/initials/svg?seed=";
@@ -169,9 +170,9 @@ export default function ProfilePage({ userId }) {
         <PostFormModal statusOnly onSubmit={handleAddStatus} onClose={() => setShowAddStatus(false)} submitting={uploading} />
       )}
       {editingPost && (
-        <PostFormModal
-          initialData={editingPost}
-          onSubmit={(d) => updatePost(editingPost._id, d.cap)}
+        <EditPostForm
+          post={editingPost}
+          onSubmit={(data) => updatePost(editingPost._id, data)}
           onClose={() => setEditingPost(null)}
         />
       )}
