@@ -140,6 +140,12 @@ export default function ProfilePage({ userId }) {
       )}
       {actionError && <p className="error-text">{actionError}</p>}
 
+
+      {myPosts.length === 0 ? (
+      <p className="updates-empty">
+      {viewingOwnProfile ? "You haven't posted anything yet." : "No posts yet."}
+      </p>
+      ) : (
       <div className="grid3">
         {myPosts.map((p) => (
           <div
@@ -161,6 +167,7 @@ export default function ProfilePage({ userId }) {
           </div>
         ))}
       </div>
+      )}
 
       {showAddPost && (
         <PostFormModal onSubmit={handleAddPost} onClose={() => setShowAddPost(false)} submitting={creating} />

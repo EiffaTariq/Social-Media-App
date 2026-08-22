@@ -1,9 +1,9 @@
 import Icon from "../icons/Icon.jsx";
 import { usePosts } from "../context/PostsContext.jsx";
-//import { CURRENT_USER_ID } from "../currentUser.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useUI } from "../context/UIContext.jsx";
 
-export default function PostCard({ p, onClick }) {
+export default function PostCard({ p }) {
   const { user } = useAuth();
   const { toggleLike } = usePosts();
   const liked = p.likes?.includes(user._id);
@@ -18,7 +18,7 @@ export default function PostCard({ p, onClick }) {
   }
 
   return (
-    <article className="post" onClick={onClick}>
+    <article className="post" onClick={() => openPost(p)}>
       <img src={p.image} alt={p.caption} loading="lazy" />
       <div className="body">
         <p className="cap">{p.caption}</p>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { usePosts } from "./context/PostsContext.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useStatuses } from "./context/StatusContext.jsx";
+import { useUI } from "./context/UIContext.jsx";
 import Rail from "./components/Rail.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import TopBar from "./components/TopBar.jsx";
@@ -22,30 +23,14 @@ const PAGES = {
 };
 
 export default function App() {
-
   const { user, loading } = useAuth();
   const [authMode, setAuthMode] = useState("login");
 
   const { posts } = usePosts();
   const { uploading } = useStatuses();
-  const [selectedPostId, setSelectedPostId] = useState(null);
+  const { selectedPostId, statusGroup, viewedUserId, active, closePost, closeStatusGroup, goTo } = useUI();
   const selectedPost = posts.find((p) => p._id === selectedPostId) || null;
-  const [active, setActive] = useState("feed");
-  const [statusGroup, setStatusGroup] = useState(null);
-  // When set, the Profile page shows this user (e.g. opened from search)
-  // instead of the logged-in person's own profile.
-  const [viewedUserId, setViewedUserId] = useState(null);
   const Page = PAGES[active];
-
-  const goToProfile = (id) => {
-    setViewedUserId(id);
-    setActive("profile");
-  };
-
-  const handleSetActive = (key) => {
-    if (key === "profile") setViewedUserId(null);
-    setActive(key);
-  };
 
   if (loading) return <div className="app-loading">Loading...</div>;
 
@@ -59,19 +44,17 @@ export default function App() {
 
   return (
     <div className="shell">
-      <Rail active={active} setActive={handleSetActive} />
+      <Rail active={active} setActive={goTo} />
       <main className="main">
-        <TopBar onOpenProfile={goToProfile} />
+        <TopBar />
         {selectedPost
-        ? <PostDetailPage post={selectedPost} onBack={() => setSelectedPostId(null)} />
-        : active === "profile"
-        ? <Page userId={viewedUserId} onOpenPost={(p) => setSelectedPostId(p._id)} onOpenStatusGroup={setStatusGroup} />
-        : <Page onOpenPost={(p) => setSelectedPostId(p._id)} onOpenStatusGroup={setStatusGroup} />}
-        {statusGroup && (
-        <StatusViewer group={statusGroup} onClose={() => setStatusGroup(null)} />
-        )}
+          ? <PostDetailPage post={selectedPost} onBack={closePost} />
+          : active === "profile"
+          ? <Page userId={viewedUserId} />
+          : <Page />}
+        {statusGroup && <StatusViewer group={statusGroup} onClose={closeStatusGroup} />}
       </main>
-      <BottomNav active={active} setActive={handleSetActive} />
+      <BottomNav active={active} setActive={goTo} />
       {uploading && (
         <div className="status-upload-bar">
           <span className="status-upload-spinner" />

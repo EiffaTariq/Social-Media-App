@@ -2,12 +2,10 @@ import Icon from "../icons/Icon.jsx";
 import { useState } from "react";
 import { avatar } from "../data.js";
 import { usePosts } from "../context/PostsContext.jsx";
-//import { CURRENT_USER_ID } from "../currentUser.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import CommentItem from "../components/CommentItem.jsx";
 
 export default function PostDetailPage({ post, onBack }) {
-  //const avatarSrc = post.owner === CURRENT_USER ? CURRENT_USER_AVATAR : avatar(post.av);
   const { toggleLike, submitComment } = usePosts();
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [commentText, setCommentText] = useState("");

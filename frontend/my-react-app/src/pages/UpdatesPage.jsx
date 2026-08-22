@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Icon from "../icons/Icon.jsx";
 import { useStatuses } from "../context/StatusContext.jsx";
-//import { CURRENT_USER_ID } from "../currentUser.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import myAvatar from "../assets/images/profile.jfif";
 import PostFormModal from "../components/PostFormModal.jsx";
+import { useUI } from "../context/UIContext.jsx";
+import { AvatarSkeleton } from "../components/Skeleton.jsx";
 
 function formatTime(dateStr) {
   const d = new Date(dateStr);
@@ -14,13 +15,14 @@ function formatTime(dateStr) {
   return sameDay ? `Today at ${time}` : `${d.toLocaleDateString()} at ${time}`;
 }
 
-export default function UpdatesPage({ onOpenStatusGroup }) {
+export default function UpdatesPage() {
   const { statuses, loading, uploading, addStatus } = useStatuses();
+  const { openStatusGroup } = useUI();
   const [showAddStatus, setShowAddStatus] = useState(false);
   const [addError, setAddError] = useState(null);
   const [viewedOpen, setViewedOpen] = useState(false);
   const { user } = useAuth();
-  
+
   async function handleAddStatus({ cap, img }) {
     try {
       await addStatus(cap, user._id, img);
@@ -33,7 +35,9 @@ export default function UpdatesPage({ onOpenStatusGroup }) {
     return (
       <div className="updates-page">
         <div className="page-head"><h1>Status</h1></div>
-        <p>Loading updates...</p>
+        <div className="status-rail">
+          {Array.from({ length: 5 }).map((_, i) => <AvatarSkeleton key={i} />)}
+        </div>
       </div>
     );
   }
@@ -68,7 +72,10 @@ export default function UpdatesPage({ onOpenStatusGroup }) {
         </button>
       </div>
 
-      <button className="updates-my-status" onClick={() => (myGroup.length ? onOpenStatusGroup(myGroup) : setShowAddStatus(true))}>
+      <button
+        className="updates-my-status"
+        onClick={() => (myGroup.length ? openStatusGroup(myGroup) : setShowAddStatus(true))}
+      >
         <div className={`updates-avatar-wrap ${myGroup.length ? "seen" : "empty"}`}>
           <img src={myAvatar} alt="You" />
           {!myGroup.length && (
@@ -94,7 +101,7 @@ export default function UpdatesPage({ onOpenStatusGroup }) {
         <>
           <div className="updates-section-label">Recent</div>
           {recent.map((group) => (
-            <StatusRow key={group[0].owner._id} group={group} unseen onOpen={() => onOpenStatusGroup(group)} />
+            <StatusRow key={group[0].owner._id} group={group} unseen onOpen={() => openStatusGroup(group)} />
           ))}
         </>
       )}
@@ -107,7 +114,7 @@ export default function UpdatesPage({ onOpenStatusGroup }) {
           </div>
           {viewedOpen &&
             viewed.map((group) => (
-              <StatusRow key={group[0].owner._id} group={group} unseen={false} onOpen={() => onOpenStatusGroup(group)} />
+              <StatusRow key={group[0].owner._id} group={group} unseen={false} onOpen={() => openStatusGroup(group)} />
             ))}
         </div>
       )}

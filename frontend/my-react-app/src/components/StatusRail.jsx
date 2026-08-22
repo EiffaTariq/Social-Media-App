@@ -1,13 +1,21 @@
-
-import { User } from "../../../../backend/models/userModel.js";
 import { useStatuses } from "../context/StatusContext.jsx";
-//import { CURRENT_USER_ID } from "../currentUser.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useUI } from "../context/UIContext.jsx";
+import { AvatarSkeleton } from "../components/Skeleton.jsx";
 
-export default function StatusRail({ onOpenStatusGroup }) {
+export default function StatusRail() {
   const { statuses, loading } = useStatuses();
   const { user } = useAuth();
-  if (loading || statuses.length === 0) return null;
+  const { openStatusGroup } = useUI();
+
+  if (loading) {
+    return (
+      <div className="status-rail">
+        {Array.from({ length: 5 }).map((_, i) => <AvatarSkeleton key={i} />)}
+      </div>
+    );
+  }
+  if (statuses.length === 0) return null; // intentional: no rail shown when there's truly nothing
 
   const grouped = {};
   statuses.forEach((s) => {
@@ -23,12 +31,11 @@ export default function StatusRail({ onOpenStatusGroup }) {
         const owner = group[0].owner;
         if (!owner) return null;
         const allSeen = group.every((s) => s.seenBy?.includes(user._id));
-        const owner = group[0].owner;
         return (
           <button
             key={owner._id}
             className={`status-avatar ${allSeen ? "seen" : "unseen"}`}
-            onClick={() => onOpenStatusGroup(group)}
+            onClick={() => openStatusGroup(group)}
           >
             <img src={owner.profilePic?.url || "/default-avatar.png"} alt={owner.name} />
           </button>

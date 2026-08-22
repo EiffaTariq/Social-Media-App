@@ -6,9 +6,9 @@
   --surface:#251217;
   --surface-raised:#301A1F;
   --border:#3c2229;
-  --accent:#e8564a;
-  --accent-dim:#a83f38;
-  --accent-soft:#f0847a;
+  --accent:#13eda5;
+  --accent-dim:#17e492;
+  --accent-soft:#9ef4df;
   --gold:#e8c391;
   --text:#f4e9e4;
   --text-dim:#c9b3ae;
@@ -524,10 +524,11 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
   min-height:100vh;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;   /* push form to the left like the reference */
   padding:var(--space-5);
   position:relative;
   overflow:hidden;
+  background: url("./assets/images/auth-bg.jpeg") no-repeat center / cover;
 }
 
 .auth-page::before{
@@ -549,8 +550,10 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
   z-index:1;
   width:100%;
   max-width:400px;
-  background:var(--surface-raised);
-  border:1px solid var(--border);
+  background: rgba(255, 255, 255, 0.001);   /* transparent card, tweak alpha to taste */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border:1px solid rgba(255, 255, 255, 0.25);
   border-radius:var(--radius-l);
   padding:var(--space-6) var(--space-5);
   box-shadow:var(--shadow-card);
@@ -646,7 +649,7 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
   font-weight:600;
   font-size:14px;
   cursor:pointer;
-  transition:background .15s ease;
+  transition:background .15 ease-in;
 }
 .auth-form button[type="submit"]:hover{ background:var(--accent-dim); }
 .auth-form button[type="submit"]:disabled{ opacity:.6; cursor:not-allowed; }
@@ -799,3 +802,19 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
     transform: rotate(360deg);
   }
 }
+
+
+/* ---------- skeleton loaders ---------- */
+.skeleton-block{
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-raised) 37%, var(--surface) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+  border-radius: var(--radius-s);
+}
+@keyframes skeleton-shimmer{
+  0%{ background-position: 100% 50%; }
+  100%{ background-position: 0 50%; }
+}
+.skeleton-img{ width:100%; aspect-ratio: 1 / 1; border-radius: var(--radius-l) var(--radius-l) 0 0; }
+.skeleton-line{ height: 12px; margin: 6px 0; }
+.skeleton-avatar{ width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; }
