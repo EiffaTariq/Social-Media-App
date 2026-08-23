@@ -2,7 +2,6 @@ import { useState } from "react";
 import Icon from "../icons/Icon.jsx";
 import { useStatuses } from "../context/StatusContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import myAvatar from "../assets/images/profile.jfif";
 import PostFormModal from "../components/PostFormModal.jsx";
 import { useUI } from "../context/UIContext.jsx";
 import { AvatarSkeleton } from "../components/Skeleton.jsx";
@@ -77,7 +76,7 @@ export default function UpdatesPage() {
         onClick={() => (myGroup.length ? openStatusGroup(myGroup) : setShowAddStatus(true))}
       >
         <div className={`updates-avatar-wrap ${myGroup.length ? "seen" : "empty"}`}>
-          <img src={myAvatar} alt="You" />
+          <img src={user.profilePic?.url || "/default-avatar.png"} alt="You" />
           {!myGroup.length && (
             <span
               className="updates-add-badge"

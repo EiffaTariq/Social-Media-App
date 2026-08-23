@@ -65,7 +65,6 @@ export default function SignupPage({ onSwitchToLogin }) {
         preview ? { url: preview } : undefined
       );
       setSuccessMsg("Account created! Redirecting you to login…");
-      // Give the person a moment to see the confirmation, then send them to login.
       setTimeout(() => onSwitchToLogin(), 1200);
     } catch (err) {
       setServerError(err.message);
@@ -74,76 +73,165 @@ export default function SignupPage({ onSwitchToLogin }) {
     }
   };
 
-  return (
-    <div className="auth-page">
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Sign Up</h2>
-        {serverError && <p className="auth-error">{serverError}</p>}
-        {successMsg && <p className="auth-success">{successMsg}</p>}
+  // return (
+  //   <div className="auth-page">
+  //     <form className="auth-form" onSubmit={handleSubmit}>
+  //       <h2>Sign Up</h2>
+  //       {serverError && <p className="auth-error">{serverError}</p>}
+  //       {successMsg && <p className="auth-success">{successMsg}</p>}
 
-        <div className="avatar-upload">
-          {preview ? (
-            <img src={preview} alt="Profile preview" className="avatar-preview" />
-          ) : (
-            <div className="avatar-preview avatar-placeholder">Add photo</div>
-          )}
-          <input type="file" accept="image/*" onChange={handleFile} />
-        </div>
+  //       <div className="avatar-upload">
+  //         {preview ? (
+  //           <img src={preview} alt="Profile preview" className="avatar-preview" />
+  //         ) : (
+  //           <div className="avatar-preview avatar-placeholder">Add photo</div>
+  //         )}
+  //         <input type="file" accept="image/*" onChange={handleFile} />
+  //       </div>
 
-        <input
-          placeholder="Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-        />
-        {errors.name && <span className="auth-error">{errors.name}</span>}
+  //       <input
+  //         placeholder="Name"
+  //         value={form.name}
+  //         onChange={(e) => setForm({ ...form, name: e.target.value })}
+  //       />
+  //       {errors.name && <span className="auth-error">{errors.name}</span>}
 
-        <input
-          placeholder="Username"
-          value={form.username}
-          onChange={(e) => setForm({ ...form, username: e.target.value.trim() })}
-        />
-        {errors.username && <span className="auth-error">{errors.username}</span>}
+  //       <input
+  //         placeholder="Username"
+  //         value={form.username}
+  //         onChange={(e) => setForm({ ...form, username: e.target.value.trim() })}
+  //       />
+  //       {errors.username && <span className="auth-error">{errors.username}</span>}
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
-        {errors.email && <span className="auth-error">{errors.email}</span>}
+  //       <input
+  //         type="email"
+  //         placeholder="Email"
+  //         value={form.email}
+  //         onChange={(e) => setForm({ ...form, email: e.target.value })}
+  //       />
+  //       {errors.email && <span className="auth-error">{errors.email}</span>}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
-        {errors.password && <span className="auth-error">{errors.password}</span>}
+  //       <input
+  //         type="password"
+  //         placeholder="Password"
+  //         value={form.password}
+  //         onChange={(e) => setForm({ ...form, password: e.target.value })}
+  //       />
+  //       {errors.password && <span className="auth-error">{errors.password}</span>}
 
-        <select value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })}>
-          <option value="">Select gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-        {errors.gender && <span className="auth-error">{errors.gender}</span>}
+  //       <select value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })}>
+  //         <option value="">Select gender</option>
+  //         <option value="male">Male</option>
+  //         <option value="female">Female</option>
+  //       </select>
+  //       {errors.gender && <span className="auth-error">{errors.gender}</span>}
 
-        <textarea
-          placeholder="Bio / caption (optional)"
-          value={form.bio}
-          maxLength={160}
-          onChange={(e) => setForm({ ...form, bio: e.target.value })}
-        />
+  //       <textarea
+  //         placeholder="Bio / caption (optional)"
+  //         value={form.bio}
+  //         maxLength={160}
+  //         onChange={(e) => setForm({ ...form, bio: e.target.value })}
+  //       />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating account..." : "Sign Up"}
-        </button>
-        <p>
-          Have an account?{" "}
-          <button type="button" className="link-btn" onClick={onSwitchToLogin}>
-            Login
-          </button>
-        </p>
-      </form>
+  //       <button type="submit" disabled={loading}>
+  //         {loading ? "Creating account..." : "Sign Up"}
+  //       </button>
+  //       <p>
+  //         Have an account?{" "}
+  //         <button type="button" className="link-btn" onClick={onSwitchToLogin}>
+  //           Login
+  //         </button>
+  //       </p>
+  //     </form>
+  //   </div>
+  // );
+
+    return (
+  <div
+  className="auth-page signup-page"
+  style={{
+    backgroundImage: "url('/up-bg.jpeg')",
+  }}
+>
+  <form className="auth-form signup-form" onSubmit={handleSubmit}>
+    <h2>Sign Up</h2>
+
+    {serverError && <p className="auth-error">{serverError}</p>}
+    {successMsg && <p className="auth-success">{successMsg}</p>}
+
+    <div className="avatar-upload">
+      {preview ? (
+        <img src={preview} alt="Profile preview" className="avatar-preview" />
+      ) : (
+        <div className="avatar-preview avatar-placeholder">Add photo</div>
+      )}
+      <input type="file" accept="image/*" onChange={handleFile} />
     </div>
-  );
+
+    <input
+      className="auth-input"
+      placeholder="Name"
+      value={form.name}
+      onChange={(e) => setForm({ ...form, name: e.target.value })}
+    />
+    {errors.name && <span className="auth-error">{errors.name}</span>}
+
+    <input
+      className="auth-input"
+      placeholder="Username"
+      value={form.username}
+      onChange={(e) => setForm({ ...form, username: e.target.value.trim() })}
+    />
+    {errors.username && <span className="auth-error">{errors.username}</span>}
+
+    <input
+      className="auth-input"
+      type="email"
+      placeholder="Email"
+      value={form.email}
+      onChange={(e) => setForm({ ...form, email: e.target.value })}
+    />
+    {errors.email && <span className="auth-error">{errors.email}</span>}
+
+    <input
+      className="auth-input"
+      type="password"
+      placeholder="Password"
+      value={form.password}
+      onChange={(e) => setForm({ ...form, password: e.target.value })}
+    />
+    {errors.password && <span className="auth-error">{errors.password}</span>}
+
+    <select
+      className="auth-input auth-select"
+      value={form.gender}
+      onChange={(e) => setForm({ ...form, gender: e.target.value })}
+    >
+      <option value="">Select gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+    {errors.gender && <span className="auth-error">{errors.gender}</span>}
+
+    <textarea
+      className="auth-input auth-textarea"
+      placeholder="Bio / caption (optional)"
+      value={form.bio}
+      maxLength={160}
+      onChange={(e) => setForm({ ...form, bio: e.target.value })}
+    />
+
+    <button type="submit" className="auth-submit" disabled={loading}>
+      {loading ? "Creating account..." : "Sign Up"}
+    </button>
+
+    <p className="auth-switch">
+      Have an account?{" "}
+      <button type="button" className="link-btn" onClick={onSwitchToLogin}>
+        Login
+      </button>
+    </p>
+  </form>
+</div>
+    );
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePosts } from "../context/PostsContext.jsx";
 import { getAllUsers } from "../api.js";
-//import { CURRENT_USER_ID } from "../currentUser.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const TABS = [
@@ -18,7 +17,11 @@ export default function ActivityPage() {
   const { posts } = usePosts();
   const { user } = useAuth();
 
-  const avatarFor = (userId) => `https://i.pravatar.cc/150?u=${userId}`;
+  const userPicMap = Object.fromEntries(
+  users.map((u) => [u._id, u.profilePic?.url])
+  );
+  const avatarFor = (userId) =>
+  userPicMap[userId] || `https://api.dicebear.com/7.x/initials/svg?seed=${userId}`;
 
    useEffect(() => {
     getAllUsers().then(setUsers).catch(() => {});

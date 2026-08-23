@@ -1,4 +1,5 @@
 import { Post } from "../models/postModel.js";
+import { User } from "../models/userModel.js"; 
 import TryCatch from "../utils/TryCatch.js";
 
 export const newPost = TryCatch(async (req, res) => {
@@ -9,7 +10,8 @@ export const newPost = TryCatch(async (req, res) => {
     return res.status(400).json({ message: "Caption and ownerId are required" });
   }
   const post = await Post.create({ caption, owner: ownerId, image });
-
+  await post.populate("owner", "name username profilePic");
+  await User.findByIdAndUpdate(ownerId, { $push: { posts: post._id } });
   console.log("Created post:", post);
   console.log("Created post ID:", post._id);
 
@@ -45,11 +47,10 @@ export const editPost = TryCatch(async (req, res) => {
     }
   }
   if (image) {
-    const isValidImage = /^data:image\/(jpeg|jpg|png|webp);base64,/.test(image);
+    const isValidImage = /^https?:\/\/res\.cloudinary\.com\//.test(image);
     if (!isValidImage) {
-      errors.image = "Image must be a JPEG, PNG, or WEBP file";
-    } else {
-      // rough size check: base64 length * 0.75 ≈ decoded bytes
+      errors.image = "Image must be a valid uploaded file URL";
+    } else { 
       const approxBytes = image.length * 0.75;
       if (approxBytes > 5 * 1024 * 1024) {
         errors.image = "Image must be smaller than 5MB";
@@ -107,6 +108,7 @@ export const editCaption = TryCatch(async (req, res) => {
 export const deletePost = TryCatch(async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ message: "No post with this id" });
+  await User.findByIdAndUpdate(post.owner, { $pull: { posts: post._id } });
   await post.deleteOne();
   res.json({ message: "Post deleted" });
 });

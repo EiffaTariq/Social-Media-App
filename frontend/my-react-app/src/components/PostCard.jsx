@@ -6,6 +6,7 @@ import { useUI } from "../context/UIContext.jsx";
 export default function PostCard({ p }) {
   const { user } = useAuth();
   const { toggleLike } = usePosts();
+  const { openPost } = useUI(); 
   const liked = p.likes?.includes(user._id);
 
   async function handleLike(e) {

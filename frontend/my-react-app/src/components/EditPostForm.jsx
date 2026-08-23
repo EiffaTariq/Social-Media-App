@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FileUpload from "./FileUpload";
 
 const VISIBILITY_OPTIONS = [
   { value: "public", label: "Public" },
@@ -7,6 +8,7 @@ const VISIBILITY_OPTIONS = [
 ];
 
 function validate({ caption, visibility, location, eventDate, altText, hasImage }) {
+  
   const errors = {};
 
   if (!caption.trim()) errors.caption = "Caption is required";
@@ -33,11 +35,12 @@ export default function EditPostForm({ post, onSubmit, onClose }) {
   const [caption, setCaption] = useState(post.caption || "");
   const [visibility, setVisibility] = useState(post.visibility || "public");
   const [location, setLocation] = useState(post.location || "");
+  
   const [eventDate, setEventDate] = useState(
     post.eventDate ? post.eventDate.slice(0, 10) : ""
   );
   const [altText, setAltText] = useState(post.altText || "");
-  const [image, setImage] = useState(null); // new base64 image, if changed
+  const [image, setImage] = useState(null); 
   const [preview, setPreview] = useState(post.image || null);
 
   const [errors, setErrors] = useState({});
@@ -125,9 +128,15 @@ export default function EditPostForm({ post, onSubmit, onClose }) {
         {errors.eventDate && <p className="error-text small">{errors.eventDate}</p>}
 
         <label className="field-label">Photo</label>
-        {preview && <img src={preview} alt="" className="modal-preview" />}
-        <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFile} />
+        <FileUpload
+          initialPreview={post.image}
+          onUploaded={(url) => {
+          setImage(url);
+          setErrors((prev) => ({ ...prev, image: undefined }));
+        }}
+        />
         {errors.image && <p className="error-text small">{errors.image}</p>}
+
 
         <label className="field-label">Alt text</label>
         <input type="text" value={altText} onChange={(e) => setAltText(e.target.value)} placeholder="Describe the image for accessibility" />
@@ -143,3 +152,4 @@ export default function EditPostForm({ post, onSubmit, onClose }) {
     </div>
   );
 }
+

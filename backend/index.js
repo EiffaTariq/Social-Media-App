@@ -6,6 +6,7 @@ import postRoutes from './routes/postRoutes.js';
 import statusRoutes from './routes/statusRoutes.js';
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import cors from 'cors';
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/status', statusRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/upload", uploadRoutes);
 
 connectDb()
   .then(() => console.log('DB connected'))
