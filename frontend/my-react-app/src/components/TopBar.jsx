@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "../icons/Icon.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useUI } from "../context/UIContext.jsx";
 import { searchUsers } from "../api.js";
 
-export default function TopBar({ onOpenProfile }) {
+export default function TopBar() {
   const { logout } = useAuth();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [open, setOpen] = useState(false);
+  const { openProfile } = useUI(); 
   const boxRef = useRef(null);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export default function TopBar({ onOpenProfile }) {
   function handleSelect(user) {
     setOpen(false);
     setQuery("");
-    onOpenProfile?.(user._id);
+    openProfile(user._id);  
   }
 
   return (

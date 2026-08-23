@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePosts } from "../context/PostsContext.jsx";
+import { ListRowSkeleton } from "../components/Skeleton.jsx";
 import { getAllUsers } from "../api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -11,22 +12,24 @@ const TABS = [
 ];
 
 export default function ActivityPage() {
-
   const [tab, setTab] = useState("all");
   const [users, setUsers] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(true);
   const { posts } = usePosts();
   const { user } = useAuth();
 
   const userPicMap = Object.fromEntries(
-  users.map((u) => [u._id, u.profilePic?.url])
+    users.map((u) => [u._id, u.profilePic?.url])
   );
   const avatarFor = (userId) =>
-  userPicMap[userId] || `https://api.dicebear.com/7.x/initials/svg?seed=${userId}`;
+    userPicMap[userId] || `https://api.dicebear.com/7.x/initials/svg?seed=${userId}`;
 
-   useEffect(() => {
-    getAllUsers().then(setUsers).catch(() => {});
+  useEffect(() => {
+    getAllUsers()
+      .then(setUsers)
+      .catch(() => {})
+      .finally(() => setUsersLoading(false));
   }, []);
-
 
   const userMap = Object.fromEntries(users.map((u) => [u._id, u.name]));
 
@@ -68,13 +71,13 @@ export default function ActivityPage() {
   const activity = [...likeActivity, ...commentActivity, ...followActivity];
   const filtered = activity.filter((a) => (tab === "all" ? true : a.type === tab));
 
-
   return (
     <div>
       <div className="page-head">
         <span className="eyebrow">Activity</span>
         <h1>What people are saying</h1>
       </div>
+
       <div className="tabrow">
         {TABS.map(([k, l]) => (
           <button key={k} className={"tab" + (tab === k ? " active" : "")} onClick={() => setTab(k)}>
@@ -82,16 +85,33 @@ export default function ActivityPage() {
           </button>
         ))}
       </div>
+
       <div>
-        {filtered.map((a) => (
-          <div className="act-row" key={a.id}>
-            <img className="avatar" src={avatarFor(a.av)} width="46" height="46" alt="" />
-            <div className="txt">
-              <b>{a.name}</b> {a.txt} <span className="time">· {a.time}</span>
-            </div>
-            {a.thumb ? <img className="thumb" src={a.thumb} alt="" /> : <span className="follow-cta">Follow back</span>}
+        {usersLoading && (
+          <div>
+            {Array.from({ length: 5 }).map((_, i) => <ListRowSkeleton key={i} />)}
           </div>
-        ))}
+        )}
+
+        {!usersLoading && filtered.length === 0 && (
+          <p className="updates-empty">
+            Nothing here yet. {tab === "all" ? "Activity from likes, comments, and follows will show up here." : `No ${tab} activity yet.`}
+          </p>
+        )}
+
+        {!usersLoading && filtered.length > 0 && (
+          <div>
+            {filtered.map((a) => (
+              <div className="act-row" key={a.id}>
+                <img className="avatar" src={avatarFor(a.av)} width="46" height="46" alt="" />
+                <div className="txt">
+                  <b>{a.name}</b> {a.txt} <span className="time">· {a.time}</span>
+                </div>
+                {a.thumb ? <img className="thumb" src={a.thumb} alt="" /> : <span className="follow-cta">Follow back</span>}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

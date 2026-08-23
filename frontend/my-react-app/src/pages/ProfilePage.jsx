@@ -90,9 +90,19 @@ export default function ProfilePage({ userId }) {
   }
 
   const avatarSrc = me?.profilePic?.url || `${FALLBACK_AVATAR}${me?.username || "user"}`;
-
+  if (!me && !meError) {
   return (
     <div>
+      <div className="cover"><div className="skeleton-block skeleton-avatar" style={{ width: 96, height: 96 }} /></div>
+      <div className="skeleton-block skeleton-line" style={{ width: "40%", margin: "12px auto" }} />
+      <div className="skeleton-block skeleton-line" style={{ width: "60%", margin: "0 auto" }} />
+    </div>
+  );
+}
+  else{
+  return (
+    <div>
+
       <div className="cover">
         <img src={avatarSrc} alt={me?.name || "User"} />
       </div>
@@ -185,6 +195,7 @@ export default function ProfilePage({ userId }) {
       )}
     </div>
   );
+}
 }
 
 function EditProfileModal({ user, onSubmit, onClose }) {
