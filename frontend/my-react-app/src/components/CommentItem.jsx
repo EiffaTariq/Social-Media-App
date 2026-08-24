@@ -1,7 +1,6 @@
 import { useState } from "react";
 import DotMenu from "./DotMenu.jsx";
 import { usePosts } from "../context/PostsContext.jsx";
-//import { CURRENT_USER_ID } from "../currentUser.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function CommentItem({ postId, comment }) {

@@ -4,7 +4,7 @@
   --bg-1:#201014;
   --bg-2:#2a161a;
   --surface:#251217;
-  --surface-raised:#301A1F;
+  --surface-raised:#0a0506;
   --border:#3c2229;
   --accent:#13eda5;
   --accent-dim:#17e492;
@@ -143,7 +143,7 @@ button{font-family:inherit;cursor:pointer;}
   transition:transform .18s ease, border-color .18s ease;
 }
 .post:hover{transform:translateY(-3px);border-color:var(--accent-dim);}
-.post img{width:100%;display:block;}
+.post img{width:75%;display:block;}
 .post .body{padding:var(--space-3) var(--space-4) var(--space-4);}
 .post .cap{font-size:14px;line-height:1.5;color:var(--text-dim);margin:0 0 var(--space-3);}
 .post .meta{display:flex;align-items:center;justify-content:space-between;}
@@ -307,7 +307,10 @@ button{font-family:inherit;cursor:pointer;}
 .status-viewer-img { width: 100%; border-radius: 8px; max-height: 60vh; object-fit: contain; }
 .status-viewer-caption { color: #fff; margin-top: 8px; }
 .status-viewer-nav { display: flex; justify-content: space-between; margin-top: 10px; }
+
+
 /* ---------- bottom nav (mobile/tablet) ---------- */
+
 .bottomnav{
   position:fixed;left:0;right:0;bottom:0;
   display:flex;justify-content:space-around;
@@ -525,7 +528,7 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* form stays on the left */
+  justify-content: flex-start;
   padding-left: 8vw;
   background-image: url("./assets/images/auth-bg.jpeg");
   background-size: cover;
@@ -574,26 +577,26 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 }
 
 
-
 .auth-subtitle{
   text-align:center;
   color:var(--text-mute);
   font-size:13px;
-  margin-bottom:var(--space-2);
+  margin-bottom:5px;
 }
-.server-error {
+.auth-error {
   text-align: center;
   font-size: 13px;
   color: #ffb3b3;
   margin-bottom: 16px;
+  margin-top:12px; 
 }
 
 .field {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 18px;
+  gap: 1px;
+  margin-bottom: 5px;
 }
 
 .field-label {
@@ -670,7 +673,7 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 }
 
 .field-forgot:hover {
-  color: #fff;
+  color: #06e49e;
 }
 
 .auth-bottom-row {
@@ -765,13 +768,14 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 .signup-form {
   width: 100%;
   max-width: 400px;
-  max-height: 90vh;          /* prevent it from overflowing on small screens */
+  max-height: 90vh;         
   overflow-y: auto;          /* scroll if content is too tall */
-  padding: 2rem;
+  padding: 1rem;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(24px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 1rem;
+  position: center;
   color: white;
 }
 
@@ -804,7 +808,7 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 }
 
 .auth-select option {
-  background: #1a1a2e;
+  background: #68afaa;
   color: white;
 }
 
@@ -890,6 +894,7 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 .link-btn{ background:none; border:none; color:var(--accent-soft); font-weight:600; cursor:pointer; padding:0; } */
 
 .auth-error{ color:var(--accent-soft); font-size:12px; font-family:var(--font-mono); }
+
 .auth-success{ color:#8fd19e; font-size:13px; text-align:center; }
 
 .avatar-upload{ display:flex; flex-direction:column; align-items:center; gap:var(--space-2); margin-bottom:var(--space-2); }
@@ -1029,6 +1034,7 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 
 
 /* ---------- skeleton loaders ---------- */
+
 .skeleton-block{
   background: linear-gradient(90deg, var(--surface) 25%, var(--surface-raised) 37%, var(--surface) 63%);
   background-size: 400% 100%;
@@ -1041,4 +1047,5 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 }
 .skeleton-img{ width:100%; aspect-ratio: 1 / 1; border-radius: var(--radius-l) var(--radius-l) 0 0; }
 .skeleton-line{ height: 12px; margin: 6px 0; }
+
 .skeleton-avatar{ width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; }

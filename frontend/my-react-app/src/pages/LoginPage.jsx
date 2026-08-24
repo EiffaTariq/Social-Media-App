@@ -73,7 +73,7 @@ export default function LoginPage({ onSwitchToSignup }) {
        
       <div className="auth-bottom-row">
         <span>
-        Don't have an account yet?{" "}
+        Don't have an account yet?{"    "}
         <button type="button" className="link-btn" onClick={onSwitchToSignup}>
         Signup
         </button>
