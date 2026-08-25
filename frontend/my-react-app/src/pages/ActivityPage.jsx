@@ -66,7 +66,9 @@ export default function ActivityPage() {
     name: userMap[f._id || f] || "Someone",
     av: f._id || f,
     txt: "started following you",
+    
   }));
+
 
   const activity = [...likeActivity, ...commentActivity, ...followActivity];
   const filtered = activity.filter((a) => (tab === "all" ? true : a.type === tab));
@@ -85,7 +87,7 @@ export default function ActivityPage() {
           </button>
         ))}
       </div>
-
+       
       <div>
         {usersLoading && (
           <div>
@@ -107,7 +109,8 @@ export default function ActivityPage() {
                 <div className="txt">
                   <b>{a.name}</b> {a.txt} <span className="time">· {a.time}</span>
                 </div>
-                {a.thumb ? <img className="thumb" src={a.thumb} alt="" /> : <span className="follow-cta">Follow back</span>}
+                {a.thumb ? <img className="thumb" src={a.thumb} alt="" /> : 
+                <button className="follow-cta">Follow back</button>}
               </div>
             ))}
           </div>

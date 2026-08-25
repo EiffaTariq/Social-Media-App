@@ -1,8 +1,8 @@
 :root{
   /* ---- design tokens ---- */
   --bg-0:#160a0d;
-  --bg-1:#201014;
-  --bg-2:#2a161a;
+  --bg-1:#030202;
+  --bg-2:#0e0a0b;
   --surface:#251217;
   --surface-raised:#0a0506;
   --border:#3c2229;
@@ -152,7 +152,9 @@ button{font-family:inherit;cursor:pointer;}
 .authorline span{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .post-actions{display:flex;align-items:center;gap:12px;color:var(--text-mute);}
 .post-actions button{background:none;border:0;display:flex;align-items:center;gap:4px;color:inherit;font-size:12px;font-family:var(--font-mono);}
-.post-actions button.liked{color:var(--accent);}
+.post-actions button.liked{
+  color:#ec1c1c;
+}
 .post-actions svg{width:16px;height:16px;}
 
 /* ---------- chips ---------- */
@@ -200,13 +202,18 @@ button{font-family:inherit;cursor:pointer;}
 /* ---------- profile ---------- */
 .cover{
   height:150px;border-radius:var(--radius-m);
-  background:linear-gradient(120deg,#3b1a1e,#1c0f13 60%, var(--accent-dim));
+  background:linear-gradient(120deg,#171e1b,#2ea965 60%, var(--accent-dim));
   position:relative;margin-bottom:56px;
 }
 .cover img{
-  position:absolute;left:24px;bottom:-40px;
-  width:96px;height:96px;border-radius:50%;
-  border:4px solid var(--bg-0);object-fit:cover;
+  position:absolute;
+  left:24px;
+  bottom:-40px;
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  border:4px solid var(--bg-0);
+  object-fit:cover;
 }
 .profile-name{font-family:var(--font-display);font-size:26px;font-weight:600;margin:0 0 4px;}
 .profile-handle{color:var(--text-mute);font-size:13px;margin:0 0 14px;}
@@ -355,7 +362,12 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 
 .post-detail{max-width:640px;margin:0 auto;}
 .back-btn{background:none;border:0;color:var(--text-dim);font-size:13px;margin-bottom:var(--space-4);}
-.post-detail-img{width:100%;border-radius:var(--radius-m);display:block;margin-bottom:var(--space-4);}
+.post-detail-img{
+  width:100%;
+  border-radius:var(--radius-m);
+  display:block;
+  margin-bottom:var(--space-4);
+}
 .post-detail-icons{display:flex;gap:16px;margin-top:var(--space-3);}
 .post-detail-icons .icon-btn{width:44px;height:44px;}
 
@@ -372,18 +384,25 @@ background:var(--surface);border:1px solid var(--border);color:var(--text-dim);f
 @media (min-width:960px){
   .bottomnav{display:none;}
   .rail{
-    display:flex;flex-direction:column;
+    display:flex;
+    flex-direction:column;
     width:230px;flex-shrink:0;
     padding:var(--space-5) var(--space-4);
     border-right:1px solid var(--border);
     position:sticky;top:0;height:100vh;
   }
   .rail .brand{margin-bottom:var(--space-6);}
-  .rail nav{display:flex;flex-direction:column;gap:4px;flex:1;}
+  .rail nav{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    flex:1;
+  }
   .rail .navitem{
     display:flex;align-items:center;gap:12px;
     padding:11px 14px;border-radius:12px;
-    color:var(--text-dim);font-size:14px;font-weight:500;
+    color:var(--text-dim);
+    font-size:14px;font-weight:500;
     border:1px solid transparent;
   }
   .rail .navitem svg{width:19px;height:19px;flex-shrink:0;}

@@ -66,9 +66,6 @@ export default function UpdatesPage() {
     <div className="updates-page">
       <div className="updates-header">
         <h1>Status</h1>
-        <button className="icon-btn" onClick={() => setShowAddStatus(true)} aria-label="Add status">
-          <Icon.Plus />
-        </button>
       </div>
 
       <button
