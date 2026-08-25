@@ -71,7 +71,6 @@ export const searchUsers = TryCatch(async (req, res) => {
   res.json({ users });
 });
 
-// POST /api/user/:id/follow  (requires isAuth, toggles follow/unfollow)
 export const toggleFollow = TryCatch(async (req, res) => {
   const targetId = req.params.id;
   const currentUserId = req.user._id.toString();
@@ -82,28 +81,72 @@ export const toggleFollow = TryCatch(async (req, res) => {
 
   const targetUser = await User.findById(targetId);
   if (!targetUser) return res.status(404).json({ message: "No user with this id" });
-
   const currentUser = await User.findById(currentUserId);
 
-  const alreadyFollowing = currentUser.followings.some(
-    (id) => id.toString() === targetId
-  );
-
+  const alreadyFollowing = currentUser.followings.some((id) => id.toString() === targetId);
   if (alreadyFollowing) {
-    currentUser.followings = currentUser.followings.filter(
-      (id) => id.toString() !== targetId
-    );
-    targetUser.followers = targetUser.followers.filter(
-      (id) => id.toString() !== currentUserId
-    );
+    currentUser.followings = currentUser.followings.filter((id) => id.toString() !== targetId);
+    targetUser.followers = targetUser.followers.filter((id) => id.toString() !== currentUserId);
     await currentUser.save();
     await targetUser.save();
-    return res.json({ message: "Unfollowed", following: false });
+    return res.json({ message: "Unfollowed", following: false, requested: false });
   }
 
-  currentUser.followings.push(targetId);
-  targetUser.followers.push(currentUserId);
-  await currentUser.save();
+  const alreadyRequested = targetUser.followRequests.some((id) => id.toString() === currentUserId);
+  if (alreadyRequested) {
+    targetUser.followRequests = targetUser.followRequests.filter((id) => id.toString() !== currentUserId);
+    targetUser.notifications = targetUser.notifications.filter(
+      (n) => !(n.type === "follow_request" && n.from.toString() === currentUserId)
+    );
+    await targetUser.save();
+    return res.json({ message: "Follow request cancelled", following: false, requested: false });
+  }
+
+  targetUser.followRequests.push(currentUserId);
+  targetUser.notifications.unshift({
+    type: "follow_request",
+    from: currentUserId,
+    message: `${currentUser.name} wants to follow you`,
+  });
   await targetUser.save();
-  res.json({ message: "Followed", following: true });
+  res.json({ message: "Follow request sent", following: false, requested: true });
+});
+
+export const acceptFollowRequest = TryCatch(async (req, res) => {
+  const requesterId = req.params.id;
+  const currentUser = await User.findById(req.user._id);
+  const requester = await User.findById(requesterId);
+  if (!requester) return res.status(404).json({ message: "No user with this id" });
+
+  const hasRequest = currentUser.followRequests.some((id) => id.toString() === requesterId);
+  if (!hasRequest) return res.status(400).json({ message: "No pending request from this user" });
+
+  currentUser.followRequests = currentUser.followRequests.filter((id) => id.toString() !== requesterId);
+  currentUser.followers.push(requesterId);
+  requester.followings.push(currentUser._id);
+
+  currentUser.notifications = currentUser.notifications.filter(
+    (n) => !(n.type === "follow_request" && n.from.toString() === requesterId)
+  );
+  requester.notifications.unshift({
+    type: "follow_accept",
+    from: currentUser._id,
+    message: `${currentUser.name} accepted your follow request`,
+  });
+
+  await currentUser.save();
+  await requester.save();
+  res.json({ message: "Follow request accepted" });
+});
+
+export const rejectFollowRequest = TryCatch(async (req, res) => {
+  const requesterId = req.params.id;
+  const currentUser = await User.findById(req.user._id);
+
+  currentUser.followRequests = currentUser.followRequests.filter((id) => id.toString() !== requesterId);
+  currentUser.notifications = currentUser.notifications.filter(
+    (n) => !(n.type === "follow_request" && n.from.toString() === requesterId)
+  );
+  await currentUser.save();
+  res.json({ message: "Follow request rejected" });
 });

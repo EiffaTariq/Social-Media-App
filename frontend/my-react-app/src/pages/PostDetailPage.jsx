@@ -1,6 +1,5 @@
 import Icon from "../icons/Icon.jsx";
 import { useState } from "react";
-import { avatar } from "../data.js";
 import { usePosts } from "../context/PostsContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import CommentItem from "../components/CommentItem.jsx";

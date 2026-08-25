@@ -11,7 +11,7 @@ export default function StatusViewer({ group, onClose }) {
 
   useEffect(() => {
     if (!current) return;
-    if (!current.seenBy?.includes()) {
+    if (!current.seenBy?.includes(user._id)) {
       seeStatus(current._id, user._id).catch(() => {});
     }
   }, [current]);

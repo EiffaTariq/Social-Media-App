@@ -55,7 +55,19 @@ const userSchema = new mongoose.Schema(
     [{ 
       type: mongoose.Schema.Types.ObjectId, 
       ref: "Post"
-    }]
+    }],
+    followRequests: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    ],
+    notifications: [
+      {
+        type: { type: String, enum: ["follow_request", "follow_accept"], default: "follow_request" },
+        from: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        message: String,
+        read: { type: Boolean, default: false },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
 
   },
   {

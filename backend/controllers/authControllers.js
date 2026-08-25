@@ -70,11 +70,11 @@ export const loginUser = TryCatch(async (req, res) => {
 });
 
 export const logoutUser = TryCatch((req, res) => {
-  res.cookie("token", "", { maxAge: 0, httpOnly: true, sameSite: "lax" });
+  res.clearCookie("token", { httpOnly: true, sameSite: "lax" });
+  res.cookie("token", "", { httpOnly: true, sameSite: "lax", expires: new Date(0) });
   res.json({ message: "Logged out successfully" });
 });
 
 export const getMe = TryCatch(async (req, res) => {
-  // req.user is set by isAuth middleware
   res.json({ user: req.user });
 });

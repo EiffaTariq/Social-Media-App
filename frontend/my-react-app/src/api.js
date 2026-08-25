@@ -198,3 +198,23 @@ export function uploadFile(file, onProgress) {
     xhr.send(formData);
   });
 }
+
+export async function acceptFollowRequest(userId) {
+  const res = await fetch(`${BASE_URL}/user/${userId}/follow-request/accept`, {
+    method: "POST",
+    credentials: "include",
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to accept request");
+  return data;
+}
+
+export async function rejectFollowRequest(userId) {
+  const res = await fetch(`${BASE_URL}/user/${userId}/follow-request/reject`, {
+    method: "POST",
+    credentials: "include",
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to reject request");
+  return data;
+}

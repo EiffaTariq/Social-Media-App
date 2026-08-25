@@ -13,6 +13,7 @@ import UpdatesPage from "./pages/UpdatesPage.jsx";
 import PostDetailPage from "./pages/PostDetailPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
 import StatusViewer from "./components/StatusViewer.jsx";
 
 const PAGES = {
@@ -30,7 +31,7 @@ export default function App() {
   const { uploading } = useStatuses();
   const { selectedPostId, statusGroup, viewedUserId, active, closePost, closeStatusGroup, goTo } = useUI();
   const selectedPost = posts.find((p) => p._id === selectedPostId) || null;
-  const Page = PAGES[active];
+  const Page = PAGES[active] || NotFoundPage;
 
   if (loading) return <div className="app-loading">Loading...</div>;
 
@@ -51,7 +52,7 @@ export default function App() {
           ? <PostDetailPage post={selectedPost} onBack={closePost} />
           : active === "profile"
           ? <Page userId={viewedUserId} />
-          : <Page />}
+          : <Page onBack={() => goTo("feed")} />}
         {statusGroup && <StatusViewer group={statusGroup} onClose={closeStatusGroup} />}
       </main>
       <BottomNav active={active} setActive={goTo} />
