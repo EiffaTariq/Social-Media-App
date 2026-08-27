@@ -37,7 +37,7 @@ export default function LoginPage({ onSwitchToSignup }) {
 
   return (
     <div className="auth-page">
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <h2>Login</h2>
         {serverError && <p className="auth-error">{serverError}</p>}
 
