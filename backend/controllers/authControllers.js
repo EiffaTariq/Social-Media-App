@@ -70,8 +70,8 @@ export const loginUser = TryCatch(async (req, res) => {
 });
 
 export const logoutUser = TryCatch((req, res) => {
-  res.clearCookie("token", { httpOnly: true, sameSite: "lax" });
-  res.cookie("token", "", { httpOnly: true, sameSite: "lax", expires: new Date(0) });
+  res.clearCookie("token", { httpOnly: true, sameSite: "none", secure: true });
+  res.cookie("token", "", { httpOnly: true, sameSite: "none", secure: true, expires: new Date(0) });
   res.json({ message: "Logged out successfully" });
 });
 

@@ -6,7 +6,7 @@ export default function Brand() {
       <span className="mark">
         <Icon.Compass style={{ width: 16, height: 16, color: "#fff" }} />
       </span>
-      Voyager
+      Social Media
     </div>
   );
 }

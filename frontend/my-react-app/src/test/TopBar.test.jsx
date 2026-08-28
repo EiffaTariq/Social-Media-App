@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import TopBar from "../context/AuthContext.jsx";
+import TopBar from "../components/TopBar.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useUI } from "../context/UIContext.jsx";
 import { searchUsers } from "../api.js";

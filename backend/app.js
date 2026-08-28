@@ -10,7 +10,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 const app = express();
 
 app.use(cors({
-  origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+  origin: process.env.CLIENT_URL?.split(","),
   credentials: true
 }));
 app.use(express.json({ limit: "10mb" }));
