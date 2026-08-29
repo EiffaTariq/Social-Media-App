@@ -5,6 +5,6 @@ export default defineConfig({
     environment: "node",
     setupFiles: "./test/setup.js",
     globals: true,
-    testTimeout: 20000, // MongoMemoryServer's first boot can be slow
+    testTimeout: 20000, 
   },
 });
