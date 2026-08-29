@@ -7,7 +7,6 @@ import img5 from "./assets/images/img5.jpeg";
 import img7 from "./assets/images/img7.jpeg";
 //import { CURRENT_USER_ID } from "../src/currentUser.js";
 import profilePic from "./assets/images/profile.jfif";
-import { usePosts } from "../src/context/PostsContext.jsx";
 
 export const CURRENT_USER = "Eiffa Tariq";
 export const CURRENT_USER_AVATAR = profilePic;
