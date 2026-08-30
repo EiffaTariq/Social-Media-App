@@ -11,24 +11,13 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 
 const app = express();
 
-// app.use(cors({
-//   origin: process.env.CLIENT_URL?.split(","),
-//   credentials: true
-// }));
 console.log("CLIENT_URL FROM RAILWAY:", process.env.CLIENT_URL);
 
-const allowedOrigins = process.env.CLIENT_URL?.split(",") || [];
-
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: process.env.CLIENT_URL?.split(","),
   credentials: true
 }));
+
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
