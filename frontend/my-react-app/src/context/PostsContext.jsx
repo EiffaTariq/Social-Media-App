@@ -32,11 +32,7 @@ export function PostsProvider({ children }) {
     setPosts((prev) => [post, ...prev]);
   };
 
-//   const updatePost = async (postId, data) => {
-//   const { post } = await apiUpdatePost(postId, data);
-//   setPosts((prev) => prev.map((p) => (p._id === postId ? post : p)));
-//   return post;
-// };
+
 const updatePost = async (postId, data) => {
   setUpdatingPost(true);
 
@@ -89,22 +85,7 @@ const updatePost = async (postId, data) => {
   };
 
   return (
-    // <PostsContext.Provider
-    //   value={{
-    //     posts,
-    //     loading,
-    //     error,
-    //     actionError,
-    //     addPost,
-    //     updatePost,
-    //     deletePost,
-    //     toggleLike,
-    //     submitComment,
-    //     editPostComment,
-    //     removeComment,
-    //     replyComment,
-    //   }}
-    // >
+   
     <PostsContext.Provider
     value={{
       posts,
