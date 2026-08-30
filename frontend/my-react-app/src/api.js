@@ -1,5 +1,9 @@
 const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
+
+
+console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
+console.log("BASE_URL:", BASE_URL);
 export async function getAllUsers() {
   const res = await fetch(`${BASE_URL}/user/all`, { credentials: "include" });
   if (!res.ok) throw new Error("Failed to load users");
