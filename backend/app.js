@@ -15,6 +15,7 @@ const app = express();
 //   origin: process.env.CLIENT_URL?.split(","),
 //   credentials: true
 // }));
+console.log("CLIENT_URL FROM RAILWAY:", process.env.CLIENT_URL);
 
 const allowedOrigins = process.env.CLIENT_URL?.split(",") || [];
 
