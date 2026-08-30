@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from 'express';
 import cookieParser from "cookie-parser";
 import cors from 'cors';
@@ -9,10 +11,24 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 
 const app = express();
 
+// app.use(cors({
+//   origin: process.env.CLIENT_URL?.split(","),
+//   credentials: true
+// }));
+
+const allowedOrigins = process.env.CLIENT_URL?.split(",") || [];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL?.split(","),
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
+
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
