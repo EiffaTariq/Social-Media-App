@@ -14,7 +14,7 @@ const app = express();
 console.log("CLIENT_URL FROM RAILWAY:", process.env.CLIENT_URL);
 
 app.use(cors({
-  origin: process.env.CLIENT_URL?.split(","),
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 
