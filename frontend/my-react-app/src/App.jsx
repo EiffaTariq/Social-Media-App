@@ -11,6 +11,7 @@ import ActivityPage from "./pages/ActivityPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import UpdatesPage from "./pages/UpdatesPage.jsx";
 import PostDetailPage from "./pages/PostDetailPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
@@ -21,6 +22,7 @@ const PAGES = {
   updates: UpdatesPage,
   activity: ActivityPage,
   profile: ProfilePage,
+  dashboard: DashboardPage
 };
 
 export default function App() {

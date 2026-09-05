@@ -8,6 +8,7 @@ import postRoutes from './routes/postRoutes.js';
 import statusRoutes from './routes/statusRoutes.js';
 import authRoutes from "./routes/authRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js"; 
 
 const app = express();
 
@@ -31,5 +32,6 @@ app.use('/api/post', postRoutes);
 app.use('/api/status', statusRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/dashboard", dashboardRoutes);  
 
 export default app;

@@ -221,3 +221,33 @@ export async function rejectFollowRequest(userId) {
   if (!res.ok) throw new Error(data.message || "Failed to reject request");
   return data;
 }
+
+export async function getDashboardStats(userId, range) {
+  const res = await fetch(`${BASE_URL}/dashboard/stats?userId=${userId}&range=${range}`, { credentials: "include" });
+  if (!res.ok) throw new Error("Failed to load stats");
+  return res.json();
+}
+
+export async function getEngagementTrend(userId, range) {
+  const res = await fetch(`${BASE_URL}/dashboard/trend?userId=${userId}&range=${range}`, { credentials: "include" });
+  if (!res.ok) throw new Error("Failed to load trend");
+  return res.json();
+}
+
+export async function getTopPosts(userId, range) {
+  const res = await fetch(`${BASE_URL}/dashboard/top-posts?userId=${userId}&range=${range}`, { credentials: "include" });
+  if (!res.ok) throw new Error("Failed to load top posts");
+  return res.json();
+}
+
+export async function getVisibilityBreakdown(userId) {
+  const res = await fetch(`${BASE_URL}/dashboard/visibility-breakdown?userId=${userId}`, { credentials: "include" });
+  if (!res.ok) throw new Error("Failed to load breakdown");
+  return res.json();
+}
+
+export async function getProfileInsights(userId) {
+  const res = await fetch(`${BASE_URL}/dashboard/insights?userId=${userId}`, { credentials: "include" });
+  if (!res.ok) throw new Error("Failed to load insights");
+  return res.json();
+}

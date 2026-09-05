@@ -197,3 +197,37 @@
 .file-progress-fill { background: #4a90e2; height: 100%; border-radius: 4px; }
 .file-error { color: #c0392b; font-size: 0.85rem; }
 .file-success { color: #2e7d32; font-size: 0.85rem; }
+
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.stat-value { font-size: 1.6rem; font-weight: 700; }
+.stat-label { font-size: 0.8rem; color: #666; margin-top: 4px; }
+
+.dashboard-filter { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.range-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
+.range-btn.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 640px) {
+  .chart-card h3 { font-size: 0.95rem; }
+  .stat-value { font-size: 1.3rem; }
+}
